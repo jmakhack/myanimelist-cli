@@ -101,7 +101,7 @@ int main (int argc, char *argv[]) {
 	CURLcode res = curl_fetch_url(curl, url, cf);
 	curl_easy_cleanup(curl);
 
-	if (res != CURLE_OK || !(cf->payload)) {
+	if (res != CURLE_OK) {
 		fprintf(stderr, "API fetch error: %s\n", curl_easy_strerror(res));
 		free(cf->payload);
 		return EXIT_FAILURE;
@@ -111,8 +111,13 @@ int main (int argc, char *argv[]) {
 	free(cf->payload);
 
 	struct json_object *anime_list;
-	json_object_object_get_ex(json, "anime", &anime_list);
+	json_bool is_user_exist = json_object_object_get_ex(json, "anime", &anime_list);
 	
+	if (!is_user_exist) {
+		fprintf(stderr, "User not found\n");
+		return EXIT_FAILURE;
+	}
+
 	size_t n_anime = json_object_array_length(anime_list);
 	printf("Watching %lu anime\n", n_anime);
 
