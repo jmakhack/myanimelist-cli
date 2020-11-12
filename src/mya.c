@@ -51,7 +51,7 @@ size_t curl_callback (void *contents, size_t size, size_t nmemb, void *userp) {
 	if (!temp) {
 		fprintf(stderr, "Failed to expand buffer for fetch payload");
 		free(p->payload);
-		return EXIT_FAILURE;
+		return 0;
 	}
 
 	p->payload = temp;
