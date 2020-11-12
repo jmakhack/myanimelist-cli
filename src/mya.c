@@ -110,7 +110,24 @@ int main (int argc, char *argv[]) {
 	json_object *json = json_tokener_parse(cf->payload);
 	free(cf->payload);
 
-	printf("%s\n", json_object_to_json_string(json));
+	struct json_object *anime_list;
+	json_object_object_get_ex(json, "anime", &anime_list);
+	
+	size_t n_anime = json_object_array_length(anime_list);
+	printf("Watching %lu anime\n", n_anime);
+
+	json_object *anime_json;
+	struct json_object *anime;
+	struct json_object *anime_title;
+
+	for (size_t i = 0; i < n_anime; i++) {
+		anime = json_object_array_get_idx(anime_list, i);
+		anime_json = json_tokener_parse(json_object_get_string(anime));
+
+		json_object_object_get_ex(anime_json, "title", &anime_title);
+		printf("%lu. %s\n", i+1, json_object_get_string(anime_title));
+	}
+
 	json_object_put(json);
 
 	return EXIT_SUCCESS;
