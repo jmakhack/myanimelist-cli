@@ -17,7 +17,7 @@ CFLAGS=-c -g -Wall
 ODIR=obj
 SDIR=src
 EXEC=mya
-LIBS=-lcurl
+LIBS=-lcurl -ljson-c
 
 TARGET=bin/$(EXEC)
 
