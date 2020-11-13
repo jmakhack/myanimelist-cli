@@ -6,7 +6,7 @@
 #include <json-c/json.h>
 
 const char *argp_program_version = "mya v1.0.0";
-const char *argp_program_bug_address = "<jmak2015@gmail.com>";
+const char *argp_program_bug_address = "<jmakhack@protonmail.com>";
 static char doc[] = "Simple command line tool for fetching user anime data from MyAnimeList.";
 static char args_doc[] = "[USERNAME]";
 static struct argp_option options[] = {
