@@ -5,7 +5,7 @@
 #include <curl/curl.h>
 #include <json-c/json.h>
 
-const char *argp_program_version = "mya v0.1";
+const char *argp_program_version = "mya v0.1.0";
 const char *argp_program_bug_address = "<jmakhack@protonmail.com>";
 static char doc[] = "Simple command line tool for fetching user anime data from MyAnimeList.";
 static char args_doc[] = "[USERNAME]";
