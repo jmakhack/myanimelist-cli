@@ -15,11 +15,13 @@ static struct argp_option options[] = {
 	{ "hold", 'h', 0, 0, "Fetch a user's on hold anime" },
 	{ "dropped", 'd', 0, 0, "Fetch a user's dropped anime" },
 	{ "plan", 'p', 0, 0, "Fetch a user's plan to watch anime" },
+	{ "plantowatch", 'p', 0, 0, "Fetch a user's plan to watch anime" },
 	{ 0 }
 };
 
 struct arguments {
-	enum { WATCHING_MODE, COMPLETED_MODE, HOLD_MODE, DROPPED_MODE, PLAN_MODE } mode;
+	enum { WATCHING_MODE, COMPLETED_MODE, HOLD_MODE, DROPPED_MODE, PLAN_MODE, ALL_MODE } mode;
+	char *args[1];
 };
 
 static error_t parse_opt (int key, char *arg, struct argp_state *state) {
@@ -30,6 +32,13 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
 	case 'h': arguments->mode = HOLD_MODE; break;
 	case 'd': arguments->mode = DROPPED_MODE; break;
 	case 'p': arguments->mode = PLAN_MODE; break;
+	case ARGP_KEY_ARG:
+		  if (state->arg_num >= 1) argp_usage(state);
+		  arguments->args[state->arg_num] = arg;
+		  break;
+	case ARGP_KEY_END:
+		  if (state->arg_num < 1) argp_usage(state);
+		  break;
 	default: return ARGP_ERR_UNKNOWN;
 	}
 	return 0;
@@ -83,7 +92,7 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
 
 int main (int argc, char *argv[]) {
 	struct arguments arguments;
-	arguments.mode = WATCHING_MODE;
+	arguments.mode = ALL_MODE;
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
 	CURL *curl = curl_easy_init();
@@ -91,7 +100,33 @@ int main (int argc, char *argv[]) {
 	struct curl_fetch_st curl_fetch;
 	struct curl_fetch_st* cf = &curl_fetch;
 
-	char *url = "https://api.jikan.moe/v3/user/jmak/animelist/watching";
+	char *endpoint;
+	switch (arguments.mode) {
+	case WATCHING_MODE:
+		endpoint = "watching";
+		break;
+	case COMPLETED_MODE:
+		endpoint = "completed";
+		break;
+	case HOLD_MODE:
+		endpoint = "onhold";
+		break;
+	case DROPPED_MODE:
+		endpoint = "dropped";
+		break;
+	case PLAN_MODE:
+		endpoint = "plantowatch";
+		break;
+	default:
+		endpoint = "all";
+		break;
+	}	
+
+	char url[128]; 
+	strcpy(url, "https://api.jikan.moe/v3/user/");
+	strcat(url, arguments.args[0]);
+	strcat(url, "/animelist/");
+	strcat(url, endpoint);
 
 	if (!curl) {
 		fprintf(stderr, "Curl init failed\n");
@@ -119,7 +154,7 @@ int main (int argc, char *argv[]) {
 	}
 
 	size_t n_anime = json_object_array_length(anime_list);
-	printf("Watching %lu anime\n", n_anime);
+	printf("%s %lu anime\n", endpoint, n_anime);
 
 	json_object *anime_json;
 	struct json_object *anime;
