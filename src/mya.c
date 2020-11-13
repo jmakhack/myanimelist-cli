@@ -14,7 +14,6 @@ static struct argp_option options[] = {
 	{ "completed", 'c', 0, 0, "Fetch a user's completed anime" },
 	{ "hold", 'h', 0, 0, "Fetch a user's on hold anime" },
 	{ "dropped", 'd', 0, 0, "Fetch a user's dropped anime" },
-	{ "plan", 'p', 0, 0, "Fetch a user's plan to watch anime" },
 	{ "plantowatch", 'p', 0, 0, "Fetch a user's plan to watch anime" },
 	{ 0 }
 };
