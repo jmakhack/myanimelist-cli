@@ -12,26 +12,33 @@
 #
 ############################################################################
 
+.DEFAULT_GOAL := all
 CC=gcc
 CFLAGS=-c -g -Wall
+DIRGUARD=@mkdir -p $(@D)
 ODIR=obj
 SDIR=src
+EDIR=bin
 EXEC=mya
 LIBS=-lcurl -ljson-c -largp
 
-TARGET=bin/$(EXEC)
+TARGET=$(EDIR)/$(EXEC)
 
 _OBJ=$(EXEC).o
 OBJ=$(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(TARGET): $(OBJ)
+	$(DIRGUARD)
 	$(CC) -o $@ $^ $(LIBS)
 
 $(ODIR)/%.o: $(SDIR)/%.c
+	$(DIRGUARD)
 	$(CC) $(CFLAGS) $< -o $@
 
-.PHONY: clean
+.PHONY: all clean
+
+all: $(TARGET)
 
 clean:
-	rm -f $(ODIR)/*.o *~
+	rm -rf $(ODIR) $(EDIR) *~
 
