@@ -13,5 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: make
-      run: make
+    - name: Install libcurl
+      run: sudo apt-get install libcurl-dev
+    - name: make all
+      run: make all
