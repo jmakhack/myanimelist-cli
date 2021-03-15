@@ -5,8 +5,8 @@
 #include <curl/curl.h>
 #include <json-c/json.h>
 
-const char *argp_program_version = "mya v0.1.0";
-const char *argp_program_bug_address = "<jmakhack@protonmail.com>";
+__unused const char *argp_program_version = "mya v0.1.0";
+__unused const char *argp_program_bug_address = "<jmakhack@protonmail.com>";
 static char doc[] = "Simple command line tool for fetching user anime data from MyAnimeList.";
 static char args_doc[] = "[USERNAME]";
 static struct argp_option options[] = {
@@ -155,7 +155,7 @@ int main (int argc, char *argv[]) {
 	size_t n_anime = json_object_array_length(anime_list);
 	printf("%s %lu anime\n", endpoint, n_anime);
 
-	json_object *anime_json;
+	struct json_object *anime_json;
 	struct json_object *anime;
 	struct json_object *anime_title;
 
