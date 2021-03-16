@@ -49,8 +49,11 @@ jobs:
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v1
+    - name: Build Codebase
+      run: | 
+        sudo apt-get install libcurl4-openssl-dev
+        sudo apt-get install libjson-c-dev
+        make all
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
