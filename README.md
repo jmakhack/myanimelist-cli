@@ -9,8 +9,8 @@ Usage
 ``` sh
 $ mya -w jmak
 watching 4 anime
-1. GitBoy
-2. MasterBranch Z
+1. Commit on Titan
+2. JoJo's Bizarre Pull Request
 3. My Neighbor Octocat
-4. O(n) Man
+4. One Push Man
 ```
