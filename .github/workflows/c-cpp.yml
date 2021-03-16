@@ -18,6 +18,6 @@ jobs:
     - name: Install libjson-c
       run: sudo apt-get install libjson-c-dev
     - name: Install libargp
-      run: sudo apt-get install libargp-devel
+      run: sudo apt-get install libargp-dev
     - name: make all
       run: make all
