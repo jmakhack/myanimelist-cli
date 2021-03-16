@@ -5,8 +5,8 @@ Usage
 ``` sh
 $ mya -w jmak
 watching 4 anime
-1. My Neighbor Octocat
-2. GitBoy
-3. MasterBranch Z
+1. GitBoy
+2. MasterBranch Z
+3. My Neighbor Octocat
 4. O(n) Man
 ```
