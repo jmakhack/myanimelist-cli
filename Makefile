@@ -12,22 +12,22 @@
 #
 ############################################################################
 
-.DEFAULT_GOAL := all
+.DEFAULT_GOAL:=all
 CC:=gcc
 CFLAGS:=-c -g -Wall
 DIRGUARD=@mkdir -p $(@D)
 ODIR:=obj
 SDIR:=src
-EDIR:=bin
+BDIR:=bin
 EXEC:=mya
-LIBS=-lcurl -ljson-c
+LIBS:=-lcurl -ljson-c
 UNAME:=$(shell uname)
 
 ifeq ($(UNAME),Darwin)
 	LIBS+=-largp
 endif
 
-TARGET:=$(EDIR)/$(EXEC)
+TARGET:=$(BDIR)/$(EXEC)
 
 _OBJ:=$(EXEC).o
 OBJ:=$(patsubst %,$(ODIR)/%,$(_OBJ))
@@ -45,5 +45,4 @@ $(ODIR)/%.o: $(SDIR)/%.c
 all: $(TARGET)
 
 clean:
-	rm -rf $(ODIR) $(EDIR) *~
-
+	rm -rf $(ODIR) $(BDIR) *~
