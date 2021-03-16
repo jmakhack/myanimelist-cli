@@ -13,19 +13,24 @@
 ############################################################################
 
 .DEFAULT_GOAL := all
-CC=gcc
-CFLAGS=-c -g -Wall
+CC:=gcc
+CFLAGS:=-c -g -Wall
 DIRGUARD=@mkdir -p $(@D)
-ODIR=obj
-SDIR=src
-EDIR=bin
-EXEC=mya
-LIBS=-lcurl -ljson-c -largp
+ODIR:=obj
+SDIR:=src
+EDIR:=bin
+EXEC:=mya
+LIBS=-lcurl -ljson-c
+ARCH:=$(shell gcc -dumpmachine | cut -c1-3)
 
-TARGET=$(EDIR)/$(EXEC)
+ifeq ($(ARCH),x86)
+	LIBS+=-largp
+endif
 
-_OBJ=$(EXEC).o
-OBJ=$(patsubst %,$(ODIR)/%,$(_OBJ))
+TARGET:=$(EDIR)/$(EXEC)
+
+_OBJ:=$(EXEC).o
+OBJ:=$(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(TARGET): $(OBJ)
 	$(DIRGUARD)
