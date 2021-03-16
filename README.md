@@ -6,7 +6,7 @@ mya is a minimalistic command line tool for fetching user anime data from [MyAni
 
 Usage
 -----
-``` sh
+```
 $ mya -w jmak
 watching 4 anime
 1. Commit on Titan
