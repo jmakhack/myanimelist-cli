@@ -15,6 +15,7 @@ static struct argp_option options[] = {
 	{ "hold", 'h', 0, 0, "Fetch a user's on hold anime" },
 	{ "dropped", 'd', 0, 0, "Fetch a user's dropped anime" },
 	{ "plantowatch", 'p', 0, 0, "Fetch a user's plan to watch anime" },
+	{ "all", 'a', 0, 0, "Fetch all anime for a user" },
 	{ 0 }
 };
 
@@ -31,6 +32,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
 	case 'h': arguments->mode = HOLD_MODE; break;
 	case 'd': arguments->mode = DROPPED_MODE; break;
 	case 'p': arguments->mode = PLAN_MODE; break;
+	case 'a': arguments->mode = ALL_MODE; break;
 	case ARGP_KEY_ARG:
 		  if (state->arg_num >= 1) argp_usage(state);
 		  arguments->args[state->arg_num] = arg;
@@ -91,7 +93,7 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
 
 int main (int argc, char *argv[]) {
 	struct arguments arguments;
-	arguments.mode = ALL_MODE;
+	arguments.mode = WATCHING_MODE;
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
 	CURL *curl = curl_easy_init();
@@ -101,8 +103,8 @@ int main (int argc, char *argv[]) {
 
 	char *endpoint;
 	switch (arguments.mode) {
-	case WATCHING_MODE:
-		endpoint = "watching";
+	case ALL_MODE:
+		endpoint = "all";
 		break;
 	case COMPLETED_MODE:
 		endpoint = "completed";
@@ -116,8 +118,9 @@ int main (int argc, char *argv[]) {
 	case PLAN_MODE:
 		endpoint = "plantowatch";
 		break;
+	case WATCHING_MODE:
 	default:
-		endpoint = "all";
+		endpoint = "watching";
 		break;
 	}	
 
