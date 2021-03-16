@@ -21,9 +21,9 @@ SDIR:=src
 EDIR:=bin
 EXEC:=mya
 LIBS=-lcurl -ljson-c
-ARCH:=$(shell gcc -dumpmachine | cut -c1-3)
+UNAME:=$(shell uname)
 
-ifeq ($(ARCH),x86)
+ifeq ($(UNAME),Darwin)
 	LIBS+=-largp
 endif
 
