@@ -49,8 +49,9 @@ jobs:
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
-    - name: Build Codebase
+    - name: Generate Build
       run: | 
+        make clean
         sudo apt-get install libcurl4-openssl-dev
         sudo apt-get install libjson-c-dev
         make all
