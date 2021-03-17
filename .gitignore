@@ -1,6 +1,5 @@
 *.swp
 *~
-/bin
-/obj
+/.idea
+/.vscode
 .DS_Store
-
