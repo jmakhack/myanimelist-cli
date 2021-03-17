@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: make clean
+      run: make clean
     - name: Install libcurl
       run: sudo apt-get install libcurl4-openssl-dev
     - name: Install libjson-c
