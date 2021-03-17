@@ -12,7 +12,7 @@ static char args_doc[] = "[USERNAME]";
 static struct argp_option options[] = {
 	{ "watching", 'w', 0, 0, "Fetch a user's currently watching anime" },
 	{ "completed", 'c', 0, 0, "Fetch a user's completed anime" },
-	{ "hold", 'h', 0, 0, "Fetch a user's on hold anime" },
+	{ "onhold", 'h', 0, 0, "Fetch a user's on hold anime" },
 	{ "dropped", 'd', 0, 0, "Fetch a user's dropped anime" },
 	{ "plantowatch", 'p', 0, 0, "Fetch a user's plan to watch anime" },
 	{ "all", 'a', 0, 0, "Fetch all anime for a user" },
