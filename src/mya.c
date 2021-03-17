@@ -103,26 +103,13 @@ int main (int argc, char *argv[]) {
 
 	char *endpoint;
 	switch (arguments.mode) {
-	case ALL_MODE:
-		endpoint = "all";
-		break;
-	case COMPLETED_MODE:
-		endpoint = "completed";
-		break;
-	case HOLD_MODE:
-		endpoint = "onhold";
-		break;
-	case DROPPED_MODE:
-		endpoint = "dropped";
-		break;
-	case PLAN_MODE:
-		endpoint = "plantowatch";
-		break;
-	case WATCHING_MODE:
-	default:
-		endpoint = "watching";
-		break;
-	}	
+	case ALL_MODE: endpoint = "all"; break;
+	case COMPLETED_MODE: endpoint = "completed"; break;
+	case HOLD_MODE: endpoint = "onhold"; break;
+	case DROPPED_MODE: endpoint = "dropped"; break;
+	case PLAN_MODE: endpoint = "plantowatch"; break;
+	default: endpoint = "watching"; break;
+	}
 
 	char url[128]; 
 	strcpy(url, "https://api.jikan.moe/v3/user/");
