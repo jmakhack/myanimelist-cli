@@ -96,11 +96,6 @@ int main (int argc, char *argv[]) {
 	arguments.mode = WATCHING_MODE;
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
-	CURL *curl = curl_easy_init();
-
-	struct curl_fetch_st curl_fetch;
-	struct curl_fetch_st* cf = &curl_fetch;
-
 	char *endpoint;
 	switch (arguments.mode) {
 	case ALL_MODE: endpoint = "all"; break;
@@ -111,53 +106,83 @@ int main (int argc, char *argv[]) {
 	default: endpoint = "watching"; break;
 	}
 
-	char url[128]; 
-	strcpy(url, "https://api.jikan.moe/v3/user/");
-	strcat(url, arguments.args[0]);
-	strcat(url, "/animelist/");
-	strcat(url, endpoint);
+	char base_url[249];
+	strcpy(base_url, "https://api.jikan.moe/v3/user/");
+	strcat(base_url, arguments.args[0]);
+	strcat(base_url, "/animelist/");
+	strcat(base_url, endpoint);
+	strcat(base_url, "?order_by=title&sort=desc&");
 
-	if (!curl) {
-		fprintf(stderr, "Curl init failed\n");
-		return EXIT_FAILURE;
+	short page_num = 1;
+	size_t page_size = 300;
+    char page[2], paginated_url[256];
+
+    CURL *curl;
+    CURLcode res;
+    struct curl_fetch_st curl_fetch;
+    struct curl_fetch_st *cf = &curl_fetch;
+
+    struct json_object *anime_list, *anime_json, *anime, *anime_title, *json;
+    size_t n_anime;
+    json_bool is_user_exist;
+
+	while (1) {
+        sprintf(page, "%d", page_num);
+
+	    strcpy(paginated_url, base_url);
+	    strcat(paginated_url, "page=");
+        strcat(paginated_url, page);
+
+        curl = curl_easy_init();
+
+        if (!curl) {
+            fprintf(stderr, "Curl init failed\n");
+            return EXIT_FAILURE;
+        }
+
+        res = curl_fetch_url(curl, paginated_url, cf);
+        curl_easy_cleanup(curl);
+
+        if (res != CURLE_OK) {
+            fprintf(stderr, "API fetch error: %s\n", curl_easy_strerror(res));
+            free(cf->payload);
+            return EXIT_FAILURE;
+        }
+
+        json = json_tokener_parse(cf->payload);
+        free(cf->payload);
+
+        is_user_exist = json_object_object_get_ex(json, "anime", &anime_list);
+
+        if (!is_user_exist) {
+            fprintf(stderr, "User not found\n");
+            return EXIT_FAILURE;
+        }
+
+        n_anime = json_object_array_length(anime_list);
+
+        if (page_num == 1) {
+            if (n_anime == page_size) {
+                printf("%s %lu+ anime\n", endpoint, page_size);
+            } else {
+                printf("%s %lu anime\n", endpoint, n_anime);
+            }
+        }
+
+        for (size_t i = 0; i < n_anime; i++) {
+            anime = json_object_array_get_idx(anime_list, i);
+            anime_json = json_tokener_parse(json_object_get_string(anime));
+
+            json_object_object_get_ex(anime_json, "title", &anime_title);
+            printf("%lu. %s\n", (i+1)+(300*(page_num-1)), json_object_get_string(anime_title));
+        }
+
+        json_object_put(json);
+
+        if (n_anime < page_size) break;
+
+        page_num += 1;
 	}
-
-	CURLcode res = curl_fetch_url(curl, url, cf);
-	curl_easy_cleanup(curl);
-
-	if (res != CURLE_OK) {
-		fprintf(stderr, "API fetch error: %s\n", curl_easy_strerror(res));
-		free(cf->payload);
-		return EXIT_FAILURE;
-	}
-
-	json_object *json = json_tokener_parse(cf->payload);
-	free(cf->payload);
-
-	struct json_object *anime_list;
-	json_bool is_user_exist = json_object_object_get_ex(json, "anime", &anime_list);
-	
-	if (!is_user_exist) {
-		fprintf(stderr, "User not found\n");
-		return EXIT_FAILURE;
-	}
-
-	size_t n_anime = json_object_array_length(anime_list);
-	printf("%s %lu anime\n", endpoint, n_anime);
-
-	struct json_object *anime_json;
-	struct json_object *anime;
-	struct json_object *anime_title;
-
-	for (size_t i = 0; i < n_anime; i++) {
-		anime = json_object_array_get_idx(anime_list, i);
-		anime_json = json_tokener_parse(json_object_get_string(anime));
-
-		json_object_object_get_ex(anime_json, "title", &anime_title);
-		printf("%lu. %s\n", i+1, json_object_get_string(anime_title));
-	}
-
-	json_object_put(json);
 
 	return EXIT_SUCCESS;
 }
