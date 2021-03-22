@@ -1,6 +1,6 @@
 ## myanimelist-cli
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 myanimelist-cli is a minimalistic command line interface for fetching user anime data from [MyAnimeList](https://myanimelist.net/)
@@ -50,6 +50,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://github.com/jmakhack"><img src="https://avatars.githubusercontent.com/u/1442227?v=4?s=100" width="100px;" alt=""/><br /><sub><b>jmakhack</b></sub></a><br /><a href="https://github.com/jmakhack/myanimelist-cli/commits?author=jmakhack" title="Code">💻</a> <a href="#maintenance-jmakhack" title="Maintenance">🚧</a> <a href="https://github.com/jmakhack/myanimelist-cli/commits?author=jmakhack" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://allcontributors.org"><img src="https://avatars.githubusercontent.com/u/46410174?v=4?s=100" width="100px;" alt=""/><br /><sub><b>All Contributors</b></sub></a><br /><a href="https://github.com/jmakhack/myanimelist-cli/commits?author=all-contributors" title="Documentation">📖</a></td>
   </tr>
 </table>
 
