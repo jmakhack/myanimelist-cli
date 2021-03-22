@@ -1,17 +1,23 @@
 newIssueWelcomeComment: >
   Thanks for your contribution in creating this myanimelist-cli issue!
+  
   If you like what we're building here, please give our project a star.
-  ![https://i.imgur.com/tRqW4IS.gif](https://i.imgur.com/tRqW4IS.gif)
+  
+  ![https://media1.tenor.com/images/650a651cefb981999f0187b798a598a0/tenor.gif](https://media1.tenor.com/images/650a651cefb981999f0187b798a598a0/tenor.gif)
 
 newPRWelcomeComment: >
   Thanks for opening this pull request for myanimelist-cli!
+  
   Please wait shortly for someone to review.
+  
   ![https://media1.tenor.com/images/de54dcf0d5723e5c190b36aed008917f/tenor.gif](https://media1.tenor.com/images/de54dcf0d5723e5c190b36aed008917f/tenor.gif)
 
 firstPRMergeComment: >
   Congrats on merging your first pull request to myanimelist-cli!
+  
   Please give our project a star if you like what we are building here.
-  ![https://i.imgur.com/M5DovJW.gif](https://i.imgur.com/M5DovJW.gif)
+  
+  ![https://media1.tenor.com/images/7eaebbe5e4d63fc9b5f029d0bab363e3/tenor.gif](https://media1.tenor.com/images/7eaebbe5e4d63fc9b5f029d0bab363e3/tenor.gif)
 
 sentimentBotToxicityThreshold: .7
 
