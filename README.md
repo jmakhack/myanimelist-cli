@@ -2,6 +2,7 @@
 
 myanimelist-cli is a minimalistic command line interface for fetching user anime data from [MyAnimeList](https://myanimelist.net/)
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/958c6555db304c358471999653de1780)](https://app.codacy.com/gh/jmakhack/myanimelist-cli?utm_source=github.com&utm_medium=referral&utm_content=jmakhack/myanimelist-cli&utm_campaign=Badge_Grade_Settings)
 [![C/C++ CI](https://github.com/jmakhack/mya/actions/workflows/c-cpp.yml/badge.svg?branch=master)](https://github.com/jmakhack/mya/actions/workflows/c-cpp.yml)
 [![CodeQL](https://github.com/jmakhack/mya/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jmakhack/mya/actions/workflows/codeql-analysis.yml)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg)](#contributors-)
