@@ -3,12 +3,12 @@
 myanimelist-cli is a minimalistic command line interface for fetching user anime data from [MyAnimeList](https://myanimelist.net/)
 
 [![C/C++ CI](https://github.com/jmakhack/mya/actions/workflows/c-cpp.yml/badge.svg?branch=master)](https://github.com/jmakhack/mya/actions/workflows/c-cpp.yml)
-[![CodeQL](https://github.com/jmakhack/mya/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jmakhack/mya/actions/workflows/codeql-analysis.yml)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![CodeQL](https://github.com/jmakhack/mya/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jmakhack/mya/actions/workflows/codeql-analysis.yml)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/a30e5356c06e4381a0b5ea92aba65ada)](https://www.codacy.com/gh/jmakhack/myanimelist-cli/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jmakhack/myanimelist-cli&amp;utm_campaign=Badge_Grade)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-Usage
------
+## Usage
 ```
 $ mya --help
 Usage: mya [OPTION...] [USERNAME]
@@ -27,8 +27,7 @@ Simple command line tool for fetching user anime data from MyAnimeList.
 Report bugs to <jmakhack@protonmail.com>.
 ```
 
-Example
------
+## Example
 ```
 $ mya -w jmak
 watching 4 anime
