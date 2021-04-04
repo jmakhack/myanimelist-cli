@@ -15,7 +15,7 @@ assignees: ''
 
 ## Environment
 <!-- Operating system and any other information of the environment the bug was found on. -->
-Operating System: [e.g. macOS Catalina]
+Operating System: \[e.g. macOS Catalina\]
 
 ## Additional Context
 <!-- Add any other context about the problem here. -->

@@ -1,4 +1,3 @@
-
 ## Supported Versions
 
 | Version | Supported          |

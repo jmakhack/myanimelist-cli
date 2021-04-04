@@ -7,7 +7,6 @@ Please link to the issue below:
 -->
 Closes #ISSUE_NUMBER
 
-
 ## Implemented Solution
 <!---
 Please write a description for your solution here.
