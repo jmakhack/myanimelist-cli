@@ -2,7 +2,7 @@
 name: Bug Report
 about: Create a bug report to help us improve the project
 title: "[BUG] "
-labels: bug, up for grabs
+labels: bug, up for grabs, C
 assignees: ''
 
 ---
