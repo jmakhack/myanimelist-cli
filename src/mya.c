@@ -34,12 +34,17 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
 	case 'p': arguments->mode = PLAN_MODE; break;
 	case 'a': arguments->mode = ALL_MODE; break;
 	case ARGP_KEY_ARG:
-		  if (state->arg_num >= 1) argp_usage(state);
-		  arguments->args[state->arg_num] = arg;
-		  break;
+		if (state->arg_num >= 1) argp_usage(state);
+		size_t arg_len = strlen(arg);
+		if (arg_len < 2 || arg_len > 16) {
+			printf("Username must be between 2 and 16 characters in length\n");
+			exit(argp_err_exit_status);
+		}
+		arguments->args[state->arg_num] = arg;
+		break;
 	case ARGP_KEY_END:
-		  if (state->arg_num < 1) argp_usage(state);
-		  break;
+		if (state->arg_num < 1) argp_usage(state);
+		break;
 	default: return ARGP_ERR_UNKNOWN;
 	}
 	return 0;
