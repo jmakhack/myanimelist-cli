@@ -37,7 +37,10 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
 	case ARGP_KEY_ARG:
 		if (state->arg_num >= 1) argp_usage(state);
 		
-		size_t arg_len = strlen(arg);
+		char username[18];
+		strncpy(username, arg, sizeof(username)-1);
+		username[17] = '\0';
+		size_t arg_len = strlen(username);
 		regex_t regex;
 		char *pattern = "^[a-zA-Z0-9_-]+$";
 		size_t nmatch = 1;
