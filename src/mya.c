@@ -4,6 +4,7 @@
 #include <argp.h>
 #include <curl/curl.h>
 #include <json-c/json.h>
+#include <regex.h>
 
 const char *argp_program_version = "mya v0.1.0";
 const char *argp_program_bug_address = "<jmakhack@protonmail.com>";
@@ -40,6 +41,19 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
 			printf("Username must be between 2 and 16 characters in length\n");
 			exit(argp_err_exit_status);
 		}
+		regex_t regex;
+		char *pattern = "^[a-zA-Z0-9_-]+$";
+		size_t nmatch = 1;
+		regmatch_t pmatch[1];
+		if (regcomp(&regex, pattern, REG_EXTENDED)) {
+			fprintf(stderr, "Failed to compile username validation regex\n");
+			exit(argp_err_exit_status);
+		}
+		if (regexec(&regex, arg, nmatch, pmatch, 0)) {
+			printf("Please enter a valid username (letters, numbers, underscores and dashes only)\n");
+			exit(argp_err_exit_status);
+		}
+		regfree(&regex);
 		arguments->args[state->arg_num] = arg;
 		break;
 	case ARGP_KEY_END:
