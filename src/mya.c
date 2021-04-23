@@ -36,24 +36,30 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
 	case 'a': arguments->mode = ALL_MODE; break;
 	case ARGP_KEY_ARG:
 		if (state->arg_num >= 1) argp_usage(state);
+		
 		size_t arg_len = strlen(arg);
-		if (arg_len < 2 || arg_len > 16) {
-			printf("Username must be between 2 and 16 characters in length\n");
-			exit(argp_err_exit_status);
-		}
 		regex_t regex;
 		char *pattern = "^[a-zA-Z0-9_-]+$";
 		size_t nmatch = 1;
 		regmatch_t pmatch[1];
+		
+		if (arg_len < 2 || arg_len > 16) {
+			printf("Username must be between 2 and 16 characters in length\n");
+			exit(argp_err_exit_status);
+		}
+
 		if (regcomp(&regex, pattern, REG_EXTENDED)) {
 			fprintf(stderr, "Failed to compile username validation regex\n");
 			exit(argp_err_exit_status);
 		}
+
 		if (regexec(&regex, arg, nmatch, pmatch, 0)) {
 			printf("Please enter a valid username (letters, numbers, underscores and dashes only)\n");
 			exit(argp_err_exit_status);
 		}
+
 		regfree(&regex);
+
 		arguments->args[state->arg_num] = arg;
 		break;
 	case ARGP_KEY_END:
