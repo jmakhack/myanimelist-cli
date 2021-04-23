@@ -4,6 +4,7 @@
 #include <argp.h>
 #include <curl/curl.h>
 #include <json-c/json.h>
+#include <regex.h>
 
 const char *argp_program_version = "mya v0.1.0";
 const char *argp_program_bug_address = "<jmakhack@protonmail.com>";
@@ -18,6 +19,10 @@ static struct argp_option options[] = {
 	{ "all", 'a', 0, 0, "Fetch all anime for a user" },
 	{ 0 }
 };
+
+size_t MYA_MIN_USERNAME_LENGTH = 2;
+size_t MYA_MAX_USERNAME_LENGTH = 16;
+size_t JIKAN_PAGE_SIZE = 300;
 
 struct arguments {
 	enum { WATCHING_MODE, COMPLETED_MODE, HOLD_MODE, DROPPED_MODE, PLAN_MODE, ALL_MODE } mode;
@@ -35,10 +40,32 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
 	case 'a': arguments->mode = ALL_MODE; break;
 	case ARGP_KEY_ARG:
 		if (state->arg_num >= 1) argp_usage(state);
-		size_t arg_len = strlen(arg);
-		if (arg_len < 2 || arg_len > 16) {
-			printf("Username must be between 2 and 16 characters in length\n");
-			exit(argp_err_exit_status);
+		{
+			char username[MYA_MAX_USERNAME_LENGTH+2];
+			strncpy(username, arg, sizeof(username)-1);
+			username[sizeof(username)-1] = '\0';
+			size_t arg_len = strlen(username);
+			regex_t regex;
+			char *pattern = "^[a-zA-Z0-9_-]+$";
+			size_t nmatch = 1;
+			regmatch_t pmatch[1];
+
+			if (arg_len < MYA_MIN_USERNAME_LENGTH || arg_len > MYA_MAX_USERNAME_LENGTH) {
+				printf("Username must be between %zu and %zu characters in length\n", MYA_MIN_USERNAME_LENGTH, MYA_MAX_USERNAME_LENGTH);
+				exit(argp_err_exit_status);
+			}
+
+			if (regcomp(&regex, pattern, REG_EXTENDED)) {
+				fprintf(stderr, "Failed to compile username validation regex\n");
+				exit(argp_err_exit_status);
+			}
+
+			if (regexec(&regex, arg, nmatch, pmatch, 0)) {
+				printf("Please enter a valid username (letters, numbers, underscores and dashes only)\n");
+				exit(argp_err_exit_status);
+			}
+
+			regfree(&regex);
 		}
 		arguments->args[state->arg_num] = arg;
 		break;
@@ -119,7 +146,6 @@ int main (int argc, char *argv[]) {
 	strcat(base_url, "?order_by=title&sort=desc&");
 
 	short page_num = 1;
-	size_t page_size = 300;
 	char page[2], paginated_url[256];
 
 	CURL *curl;
@@ -167,8 +193,8 @@ int main (int argc, char *argv[]) {
 		n_anime = json_object_array_length(anime_list);
 
 		if (page_num == 1) {
-			if (n_anime == page_size) {
-				printf("%s %lu+ anime\n", endpoint, page_size);
+			if (n_anime == JIKAN_PAGE_SIZE) {
+				printf("%s %lu+ anime\n", endpoint, JIKAN_PAGE_SIZE);
 			} else {
 				printf("%s %lu anime\n", endpoint, n_anime);
 			}
@@ -179,12 +205,12 @@ int main (int argc, char *argv[]) {
 			anime_json = json_tokener_parse(json_object_get_string(anime));
 
 			json_object_object_get_ex(anime_json, "title", &anime_title);
-			printf("%lu. %s\n", (i+1)+(300*(page_num-1)), json_object_get_string(anime_title));
+			printf("%lu. %s\n", (i+1)+(JIKAN_PAGE_SIZE*(page_num-1)), json_object_get_string(anime_title));
 		}
 
 		json_object_put(json);
 
-		if (n_anime < page_size) break;
+		if (n_anime < JIKAN_PAGE_SIZE) break;
 
 		page_num += 1;
 	}
