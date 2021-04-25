@@ -31,8 +31,6 @@ static struct argp_option options[]  = {
 	{ 0 }
 };
 
-static struct argp argp = { options, parse_opt, args_doc, doc, 0, 0, 0 };
-
 struct arguments {
 	enum { WATCHING_MODE, COMPLETED_MODE, HOLD_MODE, DROPPED_MODE, PLAN_MODE, ALL_MODE } mode;
 	char *args[1];
@@ -116,6 +114,8 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
 	}
 	return 0;
 }
+
+static struct argp argp = { options, parse_opt, args_doc, doc, 0, 0, 0 };
 
 /*
  * Function: curl_callback
