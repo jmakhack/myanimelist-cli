@@ -6,21 +6,28 @@
 #include <json-c/json.h>
 #include <regex.h>
 
-#define MYA_MIN_USERNAME_LENGTH 2
-#define MYA_MAX_USERNAME_LENGTH 16
-#define JIKAN_PAGE_SIZE 300
+#define MIN_USERNAME_LENGTH  2
+#define MAX_USERNAME_LENGTH  16
+#define PAGE_SIZE            300
 
-const char *argp_program_version = "mya v0.1.0";
+#define OPT_WATCHING     'w'
+#define OPT_COMPLETED    'c'
+#define OPT_ONHOLD       'h'
+#define OPT_DROPPED      'd'
+#define OPT_PLANTOWATCH  'p'
+#define OPT_ALL          'a'
+
+const char *argp_program_version     = "mya v0.1.0";
 const char *argp_program_bug_address = "<jmakhack@protonmail.com>";
-static char doc[] = "Simple command line tool for fetching user anime data from MyAnimeList.";
-static char args_doc[] = "[USERNAME]";
-static struct argp_option options[] = {
-	{ "watching", 'w', 0, 0, "Fetch a user's currently watching anime" },
-	{ "completed", 'c', 0, 0, "Fetch a user's completed anime" },
-	{ "onhold", 'h', 0, 0, "Fetch a user's on hold anime" },
-	{ "dropped", 'd', 0, 0, "Fetch a user's dropped anime" },
-	{ "plantowatch", 'p', 0, 0, "Fetch a user's plan to watch anime" },
-	{ "all", 'a', 0, 0, "Fetch all anime for a user" },
+static char doc[]                    = "Simple command line tool for fetching user anime data from MyAnimeList.";
+static char args_doc[]               = "[USERNAME]";
+static struct argp_option options[]  = {
+	{ "watching",    OPT_WATCHING,    0, 0, "Fetch a user's currently watching anime" },
+	{ "completed",   OPT_COMPLETED,   0, 0, "Fetch a user's completed anime"          },
+	{ "onhold",      OPT_ONHOLD,      0, 0, "Fetch a user's on hold anime"            },
+	{ "dropped",     OPT_DROPPED,     0, 0, "Fetch a user's dropped anime"            },
+	{ "plantowatch", OPT_PLANTOWATCH, 0, 0, "Fetch a user's plan to watch anime"      },
+	{ "all",         OPT_ALL,         0, 0, "Fetch all anime for a user"              },
 	{ 0 }
 };
 
@@ -30,17 +37,18 @@ struct arguments {
 };
 
 void validate_username (char *username) {
-	char username_buf[MYA_MAX_USERNAME_LENGTH+2];
+	char username_buf[MAX_USERNAME_LENGTH+2];
 	strncpy(username_buf, username, sizeof(username_buf)-1);
 	username_buf[sizeof(username_buf)-1] = '\0';
 	size_t username_len = strlen(username_buf);
+
 	regex_t regex;
 	char *pattern = "^[a-zA-Z0-9_-]+$";
 	size_t nmatch = 1;
 	regmatch_t pmatch[1];
 
-	if (username_len < MYA_MIN_USERNAME_LENGTH || username_len > MYA_MAX_USERNAME_LENGTH) {
-		fprintf(stderr, "Username must be between %d and %d characters in length\n", MYA_MIN_USERNAME_LENGTH, MYA_MAX_USERNAME_LENGTH);
+	if (username_len < MIN_USERNAME_LENGTH || username_len > MAX_USERNAME_LENGTH) {
+		fprintf(stderr, "Username must be between %d and %d characters in length\n", MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH);
 		exit(argp_err_exit_status);
 	}
 
@@ -60,12 +68,12 @@ void validate_username (char *username) {
 static error_t parse_opt (int key, char *arg, struct argp_state *state) {
 	struct arguments *arguments = state->input;
 	switch (key) {
-	case 'w': arguments->mode = WATCHING_MODE; break;
-	case 'c': arguments->mode = COMPLETED_MODE; break;
-	case 'h': arguments->mode = HOLD_MODE; break;
-	case 'd': arguments->mode = DROPPED_MODE; break;
-	case 'p': arguments->mode = PLAN_MODE; break;
-	case 'a': arguments->mode = ALL_MODE; break;
+	case OPT_WATCHING:    arguments->mode = WATCHING_MODE;  break;
+	case OPT_COMPLETED:   arguments->mode = COMPLETED_MODE; break;
+	case OPT_ONHOLD:      arguments->mode = HOLD_MODE;      break;
+	case OPT_DROPPED:     arguments->mode = DROPPED_MODE;   break;
+	case OPT_PLANTOWATCH: arguments->mode = PLAN_MODE;      break;
+	case OPT_ALL:         arguments->mode = ALL_MODE;       break;
 	case ARGP_KEY_ARG:
 		if (state->arg_num >= 1) argp_usage(state);
 		validate_username(arg);
@@ -121,18 +129,18 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
 	curl_easy_setopt(curl, CURLOPT_TIMEOUT, 30);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *) fetch);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_callback);
-	
+
 	return curl_easy_perform(curl);
 }
 
 void generate_endpoint (char *endpoint, size_t mode) {
 	switch (mode) {
-	case ALL_MODE: strcpy(endpoint, "all"); break;
-	case COMPLETED_MODE: strcpy(endpoint, "completed"); break;
-	case HOLD_MODE: strcpy(endpoint, "onhold"); break;
-	case DROPPED_MODE: strcpy(endpoint, "dropped"); break;
-	case PLAN_MODE: strcpy(endpoint, "plantowatch"); break;
-	default: strcpy(endpoint, "watching"); break;
+	case ALL_MODE:       strcpy(endpoint, "all");         break;
+	case COMPLETED_MODE: strcpy(endpoint, "completed");   break;
+	case HOLD_MODE:      strcpy(endpoint, "onhold");      break;
+	case DROPPED_MODE:   strcpy(endpoint, "dropped");     break;
+	case PLAN_MODE:      strcpy(endpoint, "plantowatch"); break;
+	default:             strcpy(endpoint, "watching");    break;
 	}
 }
 
@@ -178,8 +186,8 @@ size_t print_anime_list (struct json_object *anime_list, short page, char *list_
 	size_t n_anime = json_object_array_length(anime_list);
 
 	if (page == 1) {
-		if (n_anime == JIKAN_PAGE_SIZE) {
-			printf("%s %d+ anime\n", list_name, JIKAN_PAGE_SIZE);
+		if (n_anime == PAGE_SIZE) {
+			printf("%s %d+ anime\n", list_name, PAGE_SIZE);
 		} else {
 			printf("%s %lu anime\n", list_name, n_anime);
 		}
@@ -190,7 +198,7 @@ size_t print_anime_list (struct json_object *anime_list, short page, char *list_
 		struct json_object *anime_json = json_tokener_parse(json_object_get_string(anime));
 		struct json_object *anime_title;
 		json_object_object_get_ex(anime_json, "title", &anime_title);
-		printf("%lu. %s\n", (i+1)+(JIKAN_PAGE_SIZE*(page-1)), json_object_get_string(anime_title));
+		printf("%lu. %s\n", (i+1)+(PAGE_SIZE*(page-1)), json_object_get_string(anime_title));
 	}
 
 	return n_anime;
@@ -221,11 +229,11 @@ int main (int argc, char *argv[]) {
 			fprintf(stderr, "User not found\n");
 			exit(EXIT_FAILURE);
 		}
-		
+
 		size_t num_anime = print_anime_list(anime_list, page_num, endpoint);
 
 		json_object_put(json);
-		if (num_anime < JIKAN_PAGE_SIZE) break;
+		if (num_anime < PAGE_SIZE) break;
 	}
 	return EXIT_SUCCESS;
 }
