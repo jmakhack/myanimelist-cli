@@ -6,6 +6,10 @@
 #include <json-c/json.h>
 #include <regex.h>
 
+#define MYA_MIN_USERNAME_LENGTH 2
+#define MYA_MAX_USERNAME_LENGTH 16
+#define JIKAN_PAGE_SIZE 300
+
 const char *argp_program_version = "mya v0.1.0";
 const char *argp_program_bug_address = "<jmakhack@protonmail.com>";
 static char doc[] = "Simple command line tool for fetching user anime data from MyAnimeList.";
@@ -19,10 +23,6 @@ static struct argp_option options[] = {
 	{ "all", 'a', 0, 0, "Fetch all anime for a user" },
 	{ 0 }
 };
-
-const size_t MYA_MIN_USERNAME_LENGTH = 2;
-const size_t MYA_MAX_USERNAME_LENGTH = 16;
-const size_t JIKAN_PAGE_SIZE = 300;
 
 struct arguments {
 	enum { WATCHING_MODE, COMPLETED_MODE, HOLD_MODE, DROPPED_MODE, PLAN_MODE, ALL_MODE } mode;
@@ -40,7 +40,7 @@ void validate_username (char *username) {
 	regmatch_t pmatch[1];
 
 	if (username_len < MYA_MIN_USERNAME_LENGTH || username_len > MYA_MAX_USERNAME_LENGTH) {
-		fprintf(stderr, "Username must be between %zu and %zu characters in length\n", MYA_MIN_USERNAME_LENGTH, MYA_MAX_USERNAME_LENGTH);
+		fprintf(stderr, "Username must be between %d and %d characters in length\n", MYA_MIN_USERNAME_LENGTH, MYA_MAX_USERNAME_LENGTH);
 		exit(argp_err_exit_status);
 	}
 
@@ -179,7 +179,7 @@ size_t print_anime_list (struct json_object *anime_list, short page, char *list_
 
 	if (page == 1) {
 		if (n_anime == JIKAN_PAGE_SIZE) {
-			printf("%s %lu+ anime\n", list_name, JIKAN_PAGE_SIZE);
+			printf("%s %d+ anime\n", list_name, JIKAN_PAGE_SIZE);
 		} else {
 			printf("%s %lu anime\n", list_name, n_anime);
 		}
