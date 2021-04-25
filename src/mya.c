@@ -36,6 +36,18 @@ struct arguments {
 	char *args[1];
 };
 
+/*
+ * Function: validate_username
+ * ---------------------------
+ * Runs validation on the inputted username by checking:
+ *     - username is at least 2 characters long
+ *     - username is no more than 16 characters long
+ *     - username only contains letters, numbers, underscores and dashes only
+ *
+ * If validation fails, an error message is displayed and the program exits
+ *
+ * username: the username string to validate
+ */
 void validate_username (char *username) {
 	char username_buf[MAX_USERNAME_LENGTH+2];
 	strncpy(username_buf, username, sizeof(username_buf)-1);
@@ -65,6 +77,17 @@ void validate_username (char *username) {
 	regfree(&regex);
 }
 
+/*
+ * Function: parse_opt
+ * -------------------
+ * Parses all the various options and arguments when running the program
+ *
+ * key: specifies which option or non-option argument to parse
+ * arg: string value of argument or NULL if unapplicable
+ * state: pointer to argp_state struct
+ *
+ * returns: 0 on success, otherwise an error value
+ */
 static error_t parse_opt (int key, char *arg, struct argp_state *state) {
 	struct arguments *arguments = state->input;
 	switch (key) {
@@ -94,6 +117,18 @@ struct curl_fetch_st {
 	size_t size;
 };
 
+/*
+ * Function: curl_callback
+ * -----------------------
+ * Curl callback which assigns the delivered data to a properly sized struct buffer
+ *
+ * contents: pointer to the data
+ * size: always 1
+ * nmemb: size of the data
+ * userp: pointer to the struct to store the data
+ *
+ * returns: number of bytes in processed data
+ */
 size_t curl_callback (void *contents, size_t size, size_t nmemb, void *userp) {
 	size_t rsize = size * nmemb;
 	struct curl_fetch_st *p = (struct curl_fetch_st *) userp;
@@ -114,6 +149,17 @@ size_t curl_callback (void *contents, size_t size, size_t nmemb, void *userp) {
 	return rsize;
 }
 
+/*
+ * Function: curl_fetch_url
+ * ------------------------
+ * Fetch the data from the url and capture the return code
+ *
+ * curl: curl handle
+ * url: url to fetch data from
+ * fetch: pointer to fetch struct
+ *
+ * returns: return code of the url fetch
+ */
 CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetch) {
 	fetch->payload = (char *) calloc(1, sizeof(fetch->payload));
 	fetch->size = 0;
@@ -133,6 +179,14 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
 	return curl_easy_perform(curl);
 }
 
+/*
+ * Function: generate_endpoint
+ * ---------------------------
+ * Generates the appropriate endpoint based on the inputted mode
+ *
+ * endpoint: string to store the endpoint value
+ * mode: type of list to retrieve
+ */
 void generate_endpoint (char *endpoint, size_t mode) {
 	switch (mode) {
 	case ALL_MODE:       strcpy(endpoint, "all");         break;
@@ -144,6 +198,15 @@ void generate_endpoint (char *endpoint, size_t mode) {
 	}
 }
 
+/*
+ * Function: generate_anime_api_uri
+ * --------------------------------
+ * Generates the base uri for retrieving user anime list data
+ *
+ * uri: string to store the uri
+ * username: user to fetch the data of
+ * endpoint: endpoint to fetch the data from
+ */
 void generate_anime_api_uri (char *uri, char *username, char *endpoint) {
 	strcpy(uri, "https://api.jikan.moe/v3/user/");
 	strcat(uri, username);
@@ -152,6 +215,15 @@ void generate_anime_api_uri (char *uri, char *username, char *endpoint) {
 	strcat(uri, "?order_by=title&sort=desc");
 }
 
+/*
+ * Function: generate_paginated_uri
+ * --------------------------------
+ * Generates the paginated version of the uri
+ *
+ * paginated_uri: string to store the paginated uri
+ * base_uri: the uri to paginate
+ * page: the page number to retreive
+ */
 void generate_paginated_uri (char *paginated_uri, char *base_uri, short page) {
 	char page_buf[2];
 	sprintf(page_buf, "%hu", page);
@@ -160,6 +232,15 @@ void generate_paginated_uri (char *paginated_uri, char *base_uri, short page) {
 	strcat(paginated_uri, page_buf);
 }
 
+/*
+ * Function: get_anime_list
+ * ------------------------
+ * Fetches the desired anime list from the uri
+ *
+ * paginated_uri: uri to fetch the anime list from
+ *
+ * returns: struct containing the fetched data
+ */
 struct curl_fetch_st get_anime_list (char *paginated_uri) {
 	CURL *curl = curl_easy_init();
 
@@ -182,6 +263,17 @@ struct curl_fetch_st get_anime_list (char *paginated_uri) {
 	return curl_fetch;
 }
 
+/*
+ * Function: print_anime_list
+ * --------------------------
+ * Prints the anime list values in a list format
+ *
+ * anime_list: anime list to print
+ * page: page number of paginated list
+ * list_name: name of the type of list being printed
+ *
+ * returns: number of anime printed
+ */
 size_t print_anime_list (struct json_object *anime_list, short page, char *list_name) {
 	size_t n_anime = json_object_array_length(anime_list);
 
@@ -204,6 +296,16 @@ size_t print_anime_list (struct json_object *anime_list, short page, char *list_
 	return n_anime;
 }
 
+/*
+ * Function: main
+ * --------------
+ * Main entrypoint of program
+ *
+ * argc: number of arguments
+ * argv[]: array of arguments
+ *
+ * returns: 0 if success, otherwise error number
+ */
 int main (int argc, char *argv[]) {
 	struct arguments arguments;
 	arguments.mode = WATCHING_MODE;
