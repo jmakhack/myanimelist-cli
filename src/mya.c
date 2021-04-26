@@ -224,9 +224,9 @@ void generate_anime_api_uri (char *uri, char *username, char *endpoint) {
  * base_uri: the uri to paginate
  * page: the page number to retreive
  */
-void generate_paginated_uri (char *paginated_uri, char *base_uri, short page) {
+void generate_paginated_uri (char *paginated_uri, char *base_uri, size_t page) {
 	char page_buf[2];
-	sprintf(page_buf, "%hu", page);
+	sprintf(page_buf, "%zu", page);
 	strcpy(paginated_uri, base_uri);
 	strcat(paginated_uri, "&page=");
 	strcat(paginated_uri, page_buf);
@@ -274,14 +274,14 @@ struct curl_fetch_st get_anime_list (char *paginated_uri) {
  *
  * returns: number of anime printed
  */
-size_t print_anime_list (struct json_object *anime_list, short page, char *list_name) {
+size_t print_anime_list (struct json_object *anime_list, size_t page, char *list_name) {
 	size_t n_anime = json_object_array_length(anime_list);
 
 	if (page == 1) {
 		if (n_anime == PAGE_SIZE) {
 			printf("%s %d+ anime\n", list_name, PAGE_SIZE);
 		} else {
-			printf("%s %lu anime\n", list_name, n_anime);
+			printf("%s %zu anime\n", list_name, n_anime);
 		}
 	}
 
@@ -290,7 +290,7 @@ size_t print_anime_list (struct json_object *anime_list, short page, char *list_
 		struct json_object *anime_json = json_tokener_parse(json_object_get_string(anime));
 		struct json_object *anime_title;
 		json_object_object_get_ex(anime_json, "title", &anime_title);
-		printf("%lu. %s\n", (i+1)+(PAGE_SIZE*(page-1)), json_object_get_string(anime_title));
+		printf("%zu. %s\n", (i+1)+(PAGE_SIZE*(page-1)), json_object_get_string(anime_title));
 	}
 
 	return n_anime;
@@ -315,7 +315,7 @@ int main (int argc, char *argv[]) {
 	generate_endpoint(endpoint, arguments.mode);
 	generate_anime_api_uri(base_uri, arguments.args[0], endpoint);
 
-	short page_num = 0;
+	size_t page_num = 0;
 
 	while (++page_num) {
 		char paginated_uri[102];
