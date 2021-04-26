@@ -236,15 +236,14 @@ void generate_paginated_uri (char *paginated_uri, char *base_uri, size_t page) {
 }
 
 /*
- * Function: get_anime_list
- * ------------------------
- * Fetches the desired anime list from the uri
+ * Function: fetch_curl_payload
+ * ----------------------------
+ * Fetches the payload from the uri
  *
- * paginated_uri: uri to fetch the anime list from
- *
- * returns: struct containing the fetched data
+ * curl_fetch: pointer to curl fetch struct to store payload
+ * paginated_uri: uri to fetch the data from
  */
-struct curl_fetch_st get_anime_list (char *paginated_uri) {
+void fetch_curl_payload (struct curl_fetch_st *curl_fetch, char *paginated_uri) {
 	CURL *curl = curl_easy_init();
 
 	if (!curl) {
@@ -252,18 +251,14 @@ struct curl_fetch_st get_anime_list (char *paginated_uri) {
 		exit(EXIT_FAILURE);
 	}
 
-	struct curl_fetch_st curl_fetch;
-	struct curl_fetch_st *cf = &curl_fetch;
-	CURLcode res = curl_fetch_url(curl, paginated_uri, cf);
+	CURLcode res = curl_fetch_url(curl, paginated_uri, curl_fetch);
 	curl_easy_cleanup(curl);
 
 	if (res != CURLE_OK) {
 		fprintf(stderr, "API fetch error: %s\n", curl_easy_strerror(res));
-		free(cf->payload);
+		free(curl_fetch->payload);
 		exit(EXIT_FAILURE);
 	}
-
-	return curl_fetch;
 }
 
 /*
@@ -324,7 +319,8 @@ int main (int argc, char *argv[]) {
 		char paginated_uri[102];
 		generate_paginated_uri(paginated_uri, base_uri, page_num);
 
-		struct curl_fetch_st curl_fetch = get_anime_list(paginated_uri);
+		struct curl_fetch_st curl_fetch;
+		fetch_curl_payload(&curl_fetch, paginated_uri);
 		struct json_object *json = json_tokener_parse(curl_fetch.payload);
 		free(curl_fetch.payload);
 
