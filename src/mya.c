@@ -31,11 +31,13 @@ static struct argp_option options[]  = {
 	{ 0 }
 };
 
+/* struct to keep track of selected options and arguments */
 struct arguments {
 	enum { WATCHING_MODE, COMPLETED_MODE, HOLD_MODE, DROPPED_MODE, PLAN_MODE, ALL_MODE } mode;
 	char *args[1];
 };
 
+/* struct to store curl fetch payload and size */
 struct curl_fetch_st {
 	char *payload;
 	size_t size;
@@ -115,6 +117,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
 	return 0;
 }
 
+/* struct for specifying argument parsing behavior */
 static struct argp argp = { options, parse_opt, args_doc, doc, 0, 0, 0 };
 
 /*
