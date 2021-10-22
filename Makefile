@@ -19,9 +19,15 @@ DIRGUARD=@mkdir -p $(@D)
 ODIR:=obj
 SDIR:=src
 BDIR:=bin
-EXEC:=mya
+EXEC:=main
 LIBS:=-lcurl -ljson-c
 UNAME:=$(shell uname)
+
+# TESTS VARIABLES
+TEST_CFLAGS:=-g -Wall
+TEST_LDLIBS=`pkg-config --cflags --libs cunit `
+TEST_SOURCE_FILE=./src/mya.c ./tests/tests.c
+TEST_TARGET=tests/test
 
 ifeq ($(UNAME),Darwin)
 	LIBS+=-largp
@@ -44,5 +50,8 @@ $(ODIR)/%.o: $(SDIR)/%.c
 
 all: $(TARGET)
 
+test:
+	gcc $(TEST_SOURCE_FILE) -o $(TEST_TARGET) $(TEST_CFLAGS) $(LIBS) $(TEST_LDLIBS)
+
 clean:
-	rm -rf $(ODIR) $(BDIR) *~
+	rm -rf $(ODIR) $(BDIR) *~  *.o tests/test tests/test.dSYM
