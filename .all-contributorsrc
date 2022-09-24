@@ -24,6 +24,17 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "TBeeren",
+      "name": "Tim Beeren",
+      "avatar_url": "https://avatars.githubusercontent.com/u/36151761?v=4",
+      "profile": "https://www.linkedin.com/in/tim-beeren-88355615b/",
+      "contributions": [
+        "test",
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
