@@ -4,8 +4,9 @@ myanimelist-cli is a minimalistic command line interface for fetching user anime
 
 [![C/C++ CI](https://github.com/jmakhack/mya/actions/workflows/c-cpp.yml/badge.svg?branch=master)](https://github.com/jmakhack/mya/actions/workflows/c-cpp.yml)
 [![CodeQL](https://github.com/jmakhack/mya/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jmakhack/mya/actions/workflows/codeql-analysis.yml)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/a30e5356c06e4381a0b5ea92aba65ada)](https://www.codacy.com/gh/jmakhack/myanimelist-cli/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jmakhack/myanimelist-cli&amp;utm_campaign=Badge_Grade)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/a30e5356c06e4381a0b5ea92aba65ada)](https://www.codacy.com/gh/jmakhack/myanimelist-cli/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jmakhack/myanimelist-cli&amp;utm_campaign=Badge_Grade)
+[![Discord](https://img.shields.io/discord/1023562225790767175?color=%20%237289DA&label=discord&logo=discord&logoColor=%20%237289DA)](https://discord.gg/RTgxfFW9mS)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Usage
