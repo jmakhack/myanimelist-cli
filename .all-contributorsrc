@@ -35,6 +35,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "VividhPandey003",
+      "name": "Vividh Pandey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/91251535?v=4",
+      "profile": "https://vividhpandey.netlify.app/",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
