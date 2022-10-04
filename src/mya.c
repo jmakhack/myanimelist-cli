@@ -8,7 +8,8 @@
 
 #define MIN_USERNAME_LENGTH  2
 #define MAX_USERNAME_LENGTH  16
-#define PAGE_SIZE            300
+#define PAGE_SIZE            1000
+#define CLIENT_ID            "YOUR TOKEN HERE"
 
 /* define constants for program options */
 #define OPT_WATCHING     'w'
@@ -198,6 +199,14 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
 		return CURLE_FAILED_INIT;
 	}
 
+	/* set the client id */
+	struct curl_slist *chunk = NULL;
+
+	char client_id_header[50] = "X-MAL-CLIENT-ID: ";
+	strcat(client_id_header, CLIENT_ID);
+	chunk = curl_slist_append(chunk, client_id_header);
+	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
+
 	/* set url to retreive data from */
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 
@@ -230,12 +239,12 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
  */
 void generate_endpoint (char *endpoint, size_t mode) {
 	switch (mode) {
-	case ALL_MODE:       strcpy(endpoint, "all");         break;
-	case COMPLETED_MODE: strcpy(endpoint, "completed");   break;
-	case HOLD_MODE:      strcpy(endpoint, "onhold");      break;
-	case DROPPED_MODE:   strcpy(endpoint, "dropped");     break;
-	case PLAN_MODE:      strcpy(endpoint, "plantowatch"); break;
-	default:             strcpy(endpoint, "watching");    break;
+	case ALL_MODE:       strcpy(endpoint, "");              break;
+	case COMPLETED_MODE: strcpy(endpoint, "completed");     break;
+	case HOLD_MODE:      strcpy(endpoint, "on_hold");       break;
+	case DROPPED_MODE:   strcpy(endpoint, "dropped");       break;
+	case PLAN_MODE:      strcpy(endpoint, "plan_to_watch"); break;
+	default:             strcpy(endpoint, "watching");      break;
 	}
 }
 
@@ -249,31 +258,22 @@ void generate_endpoint (char *endpoint, size_t mode) {
  * endpoint: endpoint to fetch the data from
  */
 void generate_anime_api_uri (char *uri, char *username, char *endpoint) {
-	strcpy(uri, "https://api.jikan.moe/v3/user/");
+	strcpy(uri, "https://api.myanimelist.net/v2/users/");
 	strcat(uri, username);
-	strcat(uri, "/animelist/");
+	strcat(uri, "/animelist?status=");
 	strcat(uri, endpoint);
 
-	/* sort list by title descending */
-	strcat(uri, "?order_by=title&sort=desc");
-}
+	/* allow NSFW */
+	strcat(uri, "&nsfw=true");
 
-/*
- * Function: generate_paginated_uri
- * --------------------------------
- * Generates the paginated version of the uri
- *
- * paginated_uri: string to store the paginated uri
- * base_uri: the uri to paginate
- * page: the page number to retreive
- */
-void generate_paginated_uri (char *paginated_uri, char *base_uri, size_t page) {
-	/* convert page number to string */
-	char page_buf[2];
-	sprintf(page_buf, "%zu", page);
-	strcpy(paginated_uri, base_uri);
-	strcat(paginated_uri, "&page=");
-	strcat(paginated_uri, page_buf);
+	/* sort list by title ascending, descending not supported by MAL API */
+	strcat(uri, "&sort=anime_title");
+
+	/* set number of animes per request */
+	strcat(uri, "&limit=");
+	char page_size_str[5];
+	sprintf(page_size_str, "%d", PAGE_SIZE);
+	strcat(uri, page_size_str);
 }
 
 /*
@@ -314,10 +314,8 @@ void fetch_curl_payload (struct curl_fetch_st *curl_fetch, char *paginated_uri) 
  * anime_list: anime list to print
  * page: page number of paginated list
  * list_name: name of the type of list being printed
- *
- * returns: number of anime printed
  */
-size_t print_anime_list (struct json_object *anime_list, size_t page, char *list_name) {
+void print_anime_list (struct json_object *anime_list, size_t page, char *list_name) {
 	/* get number of anime in anime list */
 	size_t n_anime = json_object_array_length(anime_list);
 
@@ -333,16 +331,30 @@ size_t print_anime_list (struct json_object *anime_list, size_t page, char *list
 	/* iterate through anime list and print each anime title */
 	for (size_t i = 0; i < n_anime; i++) {
 		struct json_object *anime = json_object_array_get_idx(anime_list, i);
-		struct json_object *anime_json = json_tokener_parse(json_object_get_string(anime));
-		struct json_object *anime_title;
-		json_object_object_get_ex(anime_json, "title", &anime_title);
+		struct json_object *anime_node = json_object_object_get(anime, "node");
+		struct json_object *anime_title = json_object_object_get(anime_node, "title");
 
 		/* print each anime title in a numbered list format */
 		printf("%zu. %s\n", (i+1)+(PAGE_SIZE*(page-1)), json_object_get_string(anime_title));
 	}
+}
 
-	/* return the number of anime printed */
-	return n_anime;
+/*
+ * Function: get_new_uri
+ * ---------------------
+ * Get the next page of the list from the json
+ * 
+ * uri: current uri buffer
+ * json: the json object that contains the nex uri
+*/
+void get_new_uri (char *uri, struct json_object *json) {
+	struct json_object *paging = json_object_object_get(json, "paging");
+	struct json_object *next;
+	if (!json_object_object_get_ex(paging, "next", &next)) {
+		strcpy(uri, "");
+	} else {
+		strcpy(uri, json_object_get_string(next));
+	}
 }
 
 /*
@@ -362,22 +374,18 @@ int main (int argc, char *argv[]) {
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
 	/* setup uri to fetch based on arguments */
-	char endpoint[12], base_uri[94];
+	char endpoint[14], uri[145];
 	generate_endpoint(endpoint, arguments.mode);
-	generate_anime_api_uri(base_uri, arguments.args[0], endpoint);
+	generate_anime_api_uri(uri, arguments.args[0], endpoint);
 
 	/* iterator value for paginated data */
 	size_t page_num = 0;
 
 	/* main loop for printing paginated anime list */
 	while (++page_num) {
-		/* create paginated uri */
-		char paginated_uri[102];
-		generate_paginated_uri(paginated_uri, base_uri, page_num);
-
 		/* fetch data from uri */
 		struct curl_fetch_st curl_fetch;
-		fetch_curl_payload(&curl_fetch, paginated_uri);
+		fetch_curl_payload(&curl_fetch, uri);
 		struct json_object *json = json_tokener_parse(curl_fetch.payload);
 		free(curl_fetch.payload);
 
@@ -385,19 +393,22 @@ int main (int argc, char *argv[]) {
 		struct json_object *anime_list;
 
 		/* error when anime list is not found due to invalid user */
-		if (!json_object_object_get_ex(json, "anime", &anime_list)) {
+		if (!json_object_object_get_ex(json, "data", &anime_list)) {
 			fprintf(stderr, "User not found\n");
 			exit(EXIT_FAILURE);
 		}
 
+		/* get the next page of the list */
+		get_new_uri(uri, json);
+
 		/* print out the anime list */
-		size_t num_anime = print_anime_list(anime_list, page_num, endpoint);
+		print_anime_list(anime_list, page_num, endpoint);
 
 		/* cleanup json */
 		json_object_put(json);
 
 		/* exit main loop after all pages have been looped through */
-		if (num_anime < PAGE_SIZE) break;
+		if (uri[0] == '\0')  break;
 	}
 	return EXIT_SUCCESS;
 }
