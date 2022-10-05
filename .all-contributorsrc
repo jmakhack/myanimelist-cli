@@ -62,6 +62,16 @@
       "contributions": [
         "maintenance"
       ]
+    },
+    {
+      "login": "MuriloucoLouco",
+      "name": "Murilo Leandro",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58440129?v=4",
+      "profile": "https://muriloucolouco.github.io/",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
