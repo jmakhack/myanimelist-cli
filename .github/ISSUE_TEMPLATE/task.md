@@ -2,8 +2,6 @@
 name: Task
 about: Create a task that requires work but is neither a bug nor enhancement
 title: "[TASK] "
-labels: ''
-assignees: ''
 
 ---
 
