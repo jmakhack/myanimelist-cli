@@ -394,7 +394,10 @@ int main (int argc, char *argv[]) {
 
 		/* error when anime list is not found due to invalid user */
 		if (!json_object_object_get_ex(json, "data", &anime_list)) {
-			fprintf(stderr, "User not found\n");
+			if (strcmp(CLIENT_ID, "YOUR TOKEN HERE")==0)
+				fprintf(stderr, "Client ID has not been provided\n");
+			else
+				fprintf(stderr, "User not found\n");
 			exit(EXIT_FAILURE);
 		}
 
