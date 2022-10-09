@@ -271,9 +271,10 @@ void generate_anime_api_uri (char *uri, char *username, char *endpoint) {
 
 	/* set number of animes per request */
 	strcat(uri, "&limit=");
-	char page_size_str[5];
+	const int limit = 5;
+	char page_size_str[limit];
 	const char* format = "%d";
-	snprintf(page_size_str, PAGE_SIZE, format);
+	snprintf(page_size_str, limit, format, PAGE_SIZE);
 	strcat(uri, page_size_str);
 }
 
