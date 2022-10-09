@@ -18,6 +18,7 @@
 #define OPT_DROPPED      'd'
 #define OPT_PLANTOWATCH  'p'
 #define OPT_ALL          'a'
+#define OPT_SFW          's'
 
 /* initialize argp vars */
 const char *argp_program_version     = "mya v0.1.0";
@@ -31,12 +32,14 @@ static struct argp_option options[]  = {
 	{ "dropped",     OPT_DROPPED,     0, 0, "Fetch a user's dropped anime"            },
 	{ "plantowatch", OPT_PLANTOWATCH, 0, 0, "Fetch a user's plan to watch anime"      },
 	{ "all",         OPT_ALL,         0, 0, "Fetch all anime for a user"              },
-	{ 0 }
+	{ "sfw",         OPT_SFW,         0, 0, "Fetch only SFW anime"                    },
+	{ 0 },
 };
 
 /* struct to keep track of selected options and arguments */
 struct arguments {
 	enum { WATCHING_MODE, COMPLETED_MODE, HOLD_MODE, DROPPED_MODE, PLAN_MODE, ALL_MODE } mode;
+	int nsfw;
 	char *args[1];
 };
 
@@ -115,6 +118,7 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
 	case OPT_DROPPED:     arguments->mode = DROPPED_MODE;   break;
 	case OPT_PLANTOWATCH: arguments->mode = PLAN_MODE;      break;
 	case OPT_ALL:         arguments->mode = ALL_MODE;       break;
+	case OPT_SFW:         arguments->nsfw = 0;              break;
 
 	/* parse arguments */
 	case ARGP_KEY_ARG:
@@ -257,14 +261,17 @@ void generate_endpoint (char *endpoint, size_t mode) {
  * username: user to fetch the data of
  * endpoint: endpoint to fetch the data from
  */
-void generate_anime_api_uri (char *uri, char *username, char *endpoint) {
+void generate_anime_api_uri (char *uri, char *username, char *endpoint, int allow_nsfw) {
 	strcpy(uri, "https://api.myanimelist.net/v2/users/");
 	strcat(uri, username);
 	strcat(uri, "/animelist?status=");
 	strcat(uri, endpoint);
 
-	/* allow NSFW */
-	strcat(uri, "&nsfw=true");
+	/* enable/disable NSFW */
+	if(allow_nsfw == 1)
+		strcat(uri, "&nsfw=true");
+	else
+		strcat(uri, "&nsfw=false");
 
 	/* sort list by title ascending, descending not supported by MAL API */
 	strcat(uri, "&sort=anime_title");
@@ -371,12 +378,13 @@ int main (int argc, char *argv[]) {
 	/* parse options and arguments */
 	struct arguments arguments;
 	arguments.mode = WATCHING_MODE;
+	arguments.nsfw = 1;
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
 	/* setup uri to fetch based on arguments */
-	char endpoint[14], uri[145];
+	char endpoint[14], uri[146];
 	generate_endpoint(endpoint, arguments.mode);
-	generate_anime_api_uri(uri, arguments.args[0], endpoint);
+	generate_anime_api_uri(uri, arguments.args[0], endpoint, arguments.nsfw);
 
 	/* iterator value for paginated data */
 	size_t page_num = 0;
