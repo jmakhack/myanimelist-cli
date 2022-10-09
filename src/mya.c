@@ -260,6 +260,7 @@ void generate_endpoint (char *endpoint, size_t mode) {
  * uri: string to store the uri
  * username: user to fetch the data of
  * endpoint: endpoint to fetch the data from
+ * allow_nsfw: allow/block nsfw results to be fetched
  */
 void generate_anime_api_uri (char *uri, char *username, char *endpoint, int allow_nsfw) {
 	strcpy(uri, "https://api.myanimelist.net/v2/users/");
