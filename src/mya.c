@@ -272,7 +272,8 @@ void generate_anime_api_uri (char *uri, char *username, char *endpoint) {
 	/* set number of animes per request */
 	strcat(uri, "&limit=");
 	char page_size_str[5];
-	snprintf(page_size_str, PAGE_SIZE, "%d");
+	va_list ap;
+	vsnprintf(page_size_str, PAGE_SIZE, "%d", ap);
 	strcat(uri, page_size_str);
 }
 
