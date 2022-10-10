@@ -19,6 +19,8 @@ assignees: ''
 ## Additional context
 <!-- Add any other context or screenshots about the feature request here.-->
 
+Please read through the [Contributing to the Project](../../CONTRIBUTING.md) document before working on this project.
+
 For any questions or discussions, join the [Discord](https://discord.gg/RTgxfFW9mS) to meet and engage with other contributors!
 
 [![Discord](https://img.shields.io/discord/1023562225790767175?color=%20%237289DA&label=discord&logo=discord&logoColor=%20%237289DA)](https://discord.gg/RTgxfFW9mS)
