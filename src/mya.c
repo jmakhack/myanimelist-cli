@@ -269,7 +269,7 @@ void generate_anime_api_uri (char *uri, char *username, char *endpoint, int allo
 	strcat(uri, endpoint);
 
 	/* enable/disable NSFW */
-	if(allow_nsfw == 1)
+	if (allow_nsfw == 1)
 		strcat(uri, "&nsfw=true");
 	else
 		strcat(uri, "&nsfw=false");
