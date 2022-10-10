@@ -38,6 +38,9 @@ watching 4 anime
 4. One Push Man
 ```
 
+## Contributing
+For info on how to contribute to myanimelist-cli, please refer to the [Contributing to the Project](CONTRIBUTING.md) document.
+
 ## Code of Conduct
 myanimelist-cli is governed by the [Contributor Covenant v2.0](CODE_OF_CONDUCT.md).
 
