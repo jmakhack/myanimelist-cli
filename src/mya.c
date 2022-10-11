@@ -377,6 +377,12 @@ void get_new_uri (char *uri, struct json_object *json) {
  * returns: 0 if success, otherwise error number
  */
 int main (int argc, char *argv[]) {
+	/* exit early if Client ID is not provided */
+	if (strcmp(CLIENT_ID, "YOUR TOKEN HERE") == 0) {
+		fprintf(stderr, "Client ID has not been provided\n");
+		exit(EXIT_FAILURE);
+	}
+
 	/* parse options and arguments */
 	struct arguments arguments;
 	arguments.mode = WATCHING_MODE;
@@ -404,10 +410,7 @@ int main (int argc, char *argv[]) {
 
 		/* error when anime list is not found due to invalid user */
 		if (!json_object_object_get_ex(json, "data", &anime_list)) {
-			if (strcmp(CLIENT_ID, "YOUR TOKEN HERE") == 0)
-				fprintf(stderr, "Client ID has not been provided\n");
-			else
-				fprintf(stderr, "User not found\n");
+			fprintf(stderr, "User not found\n");
 			exit(EXIT_FAILURE);
 		}
 
