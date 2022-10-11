@@ -21,6 +21,7 @@ Simple command line tool for fetching user anime data from MyAnimeList.
   -h, --onhold               Fetch a user's on hold anime
   -p, --plantowatch          Fetch a user's plan to watch anime
   -w, --watching             Fetch a user's currently watching anime
+  -s, --sfw                  Fetch only SFW anime
   -?, --help                 Give this help list
       --usage                Give a short usage message
   -V, --version              Print program version
