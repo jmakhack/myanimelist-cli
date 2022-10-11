@@ -90,6 +90,15 @@
       "contributions": [
         "maintenance"
       ]
+    },
+    {
+      "login": "ahmedheltaher",
+      "name": "Ahmed Eltaher",
+      "avatar_url": "https://avatars.githubusercontent.com/u/42752070?v=4",
+      "profile": "https://www.linkedin.com/in/ahmedheltaher/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
