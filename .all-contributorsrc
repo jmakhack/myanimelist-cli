@@ -99,6 +99,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "sameersecond",
+      "name": "Sameer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/101405993?v=4",
+      "profile": "https://github.com/sameersecond",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
