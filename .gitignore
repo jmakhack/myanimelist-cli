@@ -2,6 +2,6 @@
 *~
 /.idea
 /.vscode
-/.bin
+/bin
 /obj
 .DS_Store
