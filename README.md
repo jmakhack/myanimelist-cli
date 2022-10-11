@@ -6,7 +6,7 @@ myanimelist-cli is a minimalistic command line interface for fetching user anime
 [![CodeQL](https://github.com/jmakhack/mya/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jmakhack/mya/actions/workflows/codeql-analysis.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a30e5356c06e4381a0b5ea92aba65ada)](https://www.codacy.com/gh/jmakhack/myanimelist-cli/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jmakhack/myanimelist-cli&amp;utm_campaign=Badge_Grade)
 [![Discord](https://img.shields.io/discord/1023562225790767175?color=%20%237289DA&label=discord&logo=discord&logoColor=%20%237289DA)](https://discord.gg/RTgxfFW9mS)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Usage
@@ -68,6 +68,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center"><a href="https://github.com/Sakshi-75"><img src="https://avatars.githubusercontent.com/u/20265098?v=4?s=100" width="100px;" alt="Sakshi Jain"/><br /><sub><b>Sakshi Jain</b></sub></a><br /><a href="https://github.com/jmakhack/myanimelist-cli/commits?author=Sakshi-75" title="Code">💻</a></td>
       <td align="center"><a href="https://github.com/features/security"><img src="https://avatars.githubusercontent.com/u/27347476?v=4?s=100" width="100px;" alt="Dependabot"/><br /><sub><b>Dependabot</b></sub></a><br /><a href="#maintenance-dependabot" title="Maintenance">🚧</a></td>
+      <td align="center"><a href="https://www.linkedin.com/in/ahmedheltaher/"><img src="https://avatars.githubusercontent.com/u/42752070?v=4?s=100" width="100px;" alt="Ahmed Eltaher"/><br /><sub><b>Ahmed Eltaher</b></sub></a><br /><a href="https://github.com/jmakhack/myanimelist-cli/commits?author=ahmedheltaher" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
