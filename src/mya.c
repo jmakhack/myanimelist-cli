@@ -248,33 +248,32 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
 void generate_endpoint (char *endpoint, size_t mode) {
 	switch (mode) {
 	case ALL_MODE: 
-		strncpy(endpoint, "", 1);
-		endpoint[1] = '\0';         					      
+		strncpy(endpoint, "\0", 1);					      
 		break;
 	case COMPLETED_MODE:
 		const char* s = "completed";
-		strncpy(endpoint, s, strlen(s));
-		endpoint[strlen(s)] = '\0';  
+		strncpy(endpoint, s, 9);
+		endpoint[9] = '\0';  
 		break;
 	case HOLD_MODE:
 		const char* s = "on_hold";
-		strncpy(endpoint, s, strlen(s));
-		endpoint[strlen(s)] = '\0';  
+		strncpy(endpoint, s, 8);
+		endpoint[8] = '\0';  
 		break;
 	case DROPPED_MODE:   
 		const char* s = "dropped";
-		strncpy(endpoint, s, strlen(s));
-		endpoint[strlen(s)] = '\0';  
+		strncpy(endpoint, s, 8);
+		endpoint[8] = '\0';  
 		break;
 	case PLAN_MODE:
 		const char* s = "plan_to_watch";
-		strncpy(endpoint, s, strlen(s));
-		endpoint[strlen(s)] = '\0';  
+		strncpy(endpoint, s, 14);
+		endpoint[14] = '\0';  
 		break;
 	default:
 		const char* s = "watching";
-		strncpy(endpoint, s, strlen(s));
-		endpoint[strlen(s)] = '\0';  
+		strncpy(endpoint, s, 9);
+		endpoint[9] = '\0';  
 		break;
 	}
 }
@@ -291,10 +290,11 @@ void generate_endpoint (char *endpoint, size_t mode) {
  */
 void generate_anime_api_uri (char *uri, char *username, char *endpoint, int allow_nsfw) {
 	const char* s = "https://api.myanimelist.net/v2/users/";
-	strncpy(uri, s, strlen(s));
-	uri[strlen(s)] = '\0';
+	strncpy(uri, s, 38);
+	uri[38] = '\0';
 	strncat(uri, username, MAX_USERNAME_LENGTH);
-	strncat(uri, "/animelist?status=", strlen("/animelist?status="));
+	const char* s1 = "/animelist?status=";
+	strncat(uri, s1, 19);
 	strncat(uri, endpoint, MAX_ENDPOINT_LENGTH);
 
 	/* enable/disable NSFW */
@@ -389,10 +389,10 @@ void get_new_uri (char *uri, struct json_object *json) {
 	struct json_object *paging = json_object_object_get(json, "paging");
 	struct json_object *next;
 	if (!json_object_object_get_ex(paging, "next", &next)) {
-		strncpy(uri, "", 1);
-		uri[1] = '\0';
+		strncpy(uri, "\0", 1);
 	} else {
-		strncpy(uri, json_object_get_string(next), BUFFER);
+		const char* s = json_object_get_string(next);
+		strncpy(uri, s, BUFFER);
 		uri[BUFFER] = '\0';
 	}
 }
