@@ -248,31 +248,31 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
 void generate_endpoint (char *endpoint, size_t mode) {
 	switch (mode) {
 	case ALL_MODE: 
-		strncpy(endpoint, "\0", 1);					      
+		strlcpy(endpoint, "", 2);					      
 		break;
 	case COMPLETED_MODE:
 		const char* s = "completed";
-		strncpy(endpoint, s, 9);
+		strlcpy(endpoint, s, 9);
 		endpoint[9] = '\0';  
 		break;
 	case HOLD_MODE:
 		const char* s = "on_hold";
-		strncpy(endpoint, s, 8);
+		strlcpy(endpoint, s, 8);
 		endpoint[8] = '\0';  
 		break;
 	case DROPPED_MODE:   
 		const char* s = "dropped";
-		strncpy(endpoint, s, 8);
+		strlcpy(endpoint, s, 8);
 		endpoint[8] = '\0';  
 		break;
 	case PLAN_MODE:
 		const char* s = "plan_to_watch";
-		strncpy(endpoint, s, 14);
+		strlcpy(endpoint, s, 14);
 		endpoint[14] = '\0';  
 		break;
 	default:
 		const char* s = "watching";
-		strncpy(endpoint, s, 9);
+		strlcpy(endpoint, s, 9);
 		endpoint[9] = '\0';  
 		break;
 	}
@@ -290,7 +290,7 @@ void generate_endpoint (char *endpoint, size_t mode) {
  */
 void generate_anime_api_uri (char *uri, char *username, char *endpoint, int allow_nsfw) {
 	const char* s = "https://api.myanimelist.net/v2/users/";
-	strncpy(uri, s, 38);
+	strlcpy(uri, s, 38);
 	uri[38] = '\0';
 	strncat(uri, username, MAX_USERNAME_LENGTH);
 	const char* s1 = "/animelist?status=";
@@ -389,10 +389,10 @@ void get_new_uri (char *uri, struct json_object *json) {
 	struct json_object *paging = json_object_object_get(json, "paging");
 	struct json_object *next;
 	if (!json_object_object_get_ex(paging, "next", &next)) {
-		strncpy(uri, "\0", 1);
+		strlcpy(uri, "", 2);
 	} else {
 		const char* s = json_object_get_string(next);
-		strncpy(uri, s, BUFFER);
+		strlcpy(uri, s, BUFFER);
 		uri[BUFFER] = '\0';
 	}
 }
