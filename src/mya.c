@@ -209,7 +209,9 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
 	struct curl_slist *chunk = NULL;
 
 	char client_id_header[50] = "X-MAL-CLIENT-ID: ";
-	strncat(client_id_header, CLIENT_ID, strlen(CLIENT_ID));
+	int n = strlen(CLIENT_ID);
+	CLIENT_ID[n] = '\0';
+	strncat(client_id_header, CLIENT_ID, 33);
 	chunk = curl_slist_append(chunk, client_id_header);
 	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
 
@@ -245,7 +247,7 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
  */
 void generate_endpoint (char *endpoint, size_t mode) {
 	switch (mode) {
-	case ALL_MODE:       strncpy(endpoint, "", 2);              					  break;
+	case ALL_MODE:       strncpy(endpoint, "", 2);            					      break;
 	case COMPLETED_MODE: strncpy(endpoint, "completed", strlen("completed"));   	  break;
 	case HOLD_MODE:      strncpy(endpoint, "on_hold", strlen("on_hold"));       	  break;
 	case DROPPED_MODE:   strncpy(endpoint, "dropped", strlen("dropped"));       	  break;
@@ -266,8 +268,12 @@ void generate_endpoint (char *endpoint, size_t mode) {
  */
 void generate_anime_api_uri (char *uri, char *username, char *endpoint, int allow_nsfw) {
 	strncpy(uri, "https://api.myanimelist.net/v2/users/", strlen("https://api.myanimelist.net/v2/users/"));
+	int n = strlen(username);
+	username[n] = '\0';
 	strncat(uri, username, MAX_USERNAME_LENGTH);
 	strncat(uri, "/animelist?status=", strlen("/animelist?status="));
+	n = strlen(endpoint);
+	endpoint[n] = '\0';
 	strncat(uri, endpoint, MAX_ENDPOINT_LENGTH);
 
 	/* enable/disable NSFW */
@@ -284,7 +290,7 @@ void generate_anime_api_uri (char *uri, char *username, char *endpoint, int allo
 	const int limit = 5;
 	char page_size_str[limit];
 	snprintf(page_size_str, limit, "%d", PAGE_SIZE);
-	strncat(uri, page_size_str, 5);
+	strncat(uri, page_size_str, limit);
 }
 
 /*
