@@ -252,27 +252,27 @@ void generate_endpoint (char *endpoint, size_t mode) {
 		break;
 	case COMPLETED_MODE:
 		const char* s = "completed";
-		strlcpy(endpoint, s, 9);
-		endpoint[9] = '\0';  
+		strlcpy(endpoint, s, 11);
+		endpoint[10] = '\0';  
 		break;
 	case HOLD_MODE:
 		const char* s = "on_hold";
-		strlcpy(endpoint, s, 8);
+		strlcpy(endpoint, s, 9);
 		endpoint[8] = '\0';  
 		break;
 	case DROPPED_MODE:   
 		const char* s = "dropped";
-		strlcpy(endpoint, s, 8);
+		strlcpy(endpoint, s, 9);
 		endpoint[8] = '\0';  
 		break;
 	case PLAN_MODE:
 		const char* s = "plan_to_watch";
-		strlcpy(endpoint, s, 14);
+		strlcpy(endpoint, s, 15);
 		endpoint[14] = '\0';  
 		break;
 	default:
 		const char* s = "watching";
-		strlcpy(endpoint, s, 9);
+		strlcpy(endpoint, s, 10);
 		endpoint[9] = '\0';  
 		break;
 	}
@@ -290,7 +290,7 @@ void generate_endpoint (char *endpoint, size_t mode) {
  */
 void generate_anime_api_uri (char *uri, char *username, char *endpoint, int allow_nsfw) {
 	const char* s = "https://api.myanimelist.net/v2/users/";
-	strlcpy(uri, s, 38);
+	strlcpy(uri, s, 39);
 	uri[38] = '\0';
 	strncat(uri, username, MAX_USERNAME_LENGTH);
 	const char* s1 = "/animelist?status=";
