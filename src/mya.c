@@ -8,8 +8,8 @@
 
 #define MIN_USERNAME_LENGTH  2
 #define MAX_USERNAME_LENGTH  16
-#define MAX_ENDPOINT_LENGTH	 20
-#define BUFFER				 150
+#define MAX_ENDPOINT_LENGTH	 14
+#define BUFFER				 146
 #define PAGE_SIZE            1000
 #define CLIENT_ID            "YOUR TOKEN HERE"
 
@@ -247,12 +247,35 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
  */
 void generate_endpoint (char *endpoint, size_t mode) {
 	switch (mode) {
-	case ALL_MODE:       strncpy(endpoint, "", 2);            					      break;
-	case COMPLETED_MODE: strncpy(endpoint, "completed", strlen("completed"));   	  break;
-	case HOLD_MODE:      strncpy(endpoint, "on_hold", strlen("on_hold"));       	  break;
-	case DROPPED_MODE:   strncpy(endpoint, "dropped", strlen("dropped"));       	  break;
-	case PLAN_MODE:      strncpy(endpoint, "plan_to_watch", strlen("plan_to_watch")); break;
-	default:             strncpy(endpoint, "watching", strlen("watching"));      	  break;
+	case ALL_MODE: 
+		strncpy(endpoint, "", 1);
+		endpoint[1] = '\0';         					      
+		break;
+	case COMPLETED_MODE:
+		const char* s = "completed";
+		strncpy(endpoint, s, strlen(s));
+		endpoint[strlen(s)] = '\0';  
+		break;
+	case HOLD_MODE:
+		const char* s = "on_hold";
+		strncpy(endpoint, s, strlen(s));
+		endpoint[strlen(s)] = '\0';  
+		break;
+	case DROPPED_MODE:   
+		const char* s = "dropped";
+		strncpy(endpoint, s, strlen(s));
+		endpoint[strlen(s)] = '\0';  
+		break;
+	case PLAN_MODE:
+		const char* s = "plan_to_watch";
+		strncpy(endpoint, s, strlen(s));
+		endpoint[strlen(s)] = '\0';  
+		break;
+	default:
+		const char* s = "watching";
+		strncpy(endpoint, s, strlen(s));
+		endpoint[strlen(s)] = '\0';  
+		break;
 	}
 }
 
@@ -267,9 +290,9 @@ void generate_endpoint (char *endpoint, size_t mode) {
  * allow_nsfw: allow/block nsfw results to be fetched
  */
 void generate_anime_api_uri (char *uri, char *username, char *endpoint, int allow_nsfw) {
-	strncpy(uri, "https://api.myanimelist.net/v2/users/", strlen("https://api.myanimelist.net/v2/users/"));
-	int n = strlen(username);
-	username[n] = '\0';
+	const char* s = "https://api.myanimelist.net/v2/users/";
+	strncpy(uri, s, strlen(s));
+	uri[strlen(s)] = '\0';
 	strncat(uri, username, MAX_USERNAME_LENGTH);
 	strncat(uri, "/animelist?status=", strlen("/animelist?status="));
 	n = strlen(endpoint);
@@ -368,9 +391,11 @@ void get_new_uri (char *uri, struct json_object *json) {
 	struct json_object *paging = json_object_object_get(json, "paging");
 	struct json_object *next;
 	if (!json_object_object_get_ex(paging, "next", &next)) {
-		strncpy(uri, "", 2);
+		strncpy(uri, "", 1);
+		uri[1] = '\0';
 	} else {
 		strncpy(uri, json_object_get_string(next), BUFFER);
+		uri[BUFFER] = '\0';
 	}
 }
 
