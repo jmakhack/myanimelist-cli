@@ -75,7 +75,7 @@ void validate_username (char *username) {
 	regmatch_t pmatch[1];
 
 	/* check if username is acceptable length */	
-	if (username_len < MIN_USERNAME_LENGTH || username_len > MAX_USERNAME_LENGTH) {
+	if ((username_len < MIN_USERNAME_LENGTH) || (username_len > MAX_USERNAME_LENGTH)) {
 		fprintf(stderr, "Username must be between %d and %d characters in length\n", MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH);
 		exit(argp_err_exit_status);
 	}
