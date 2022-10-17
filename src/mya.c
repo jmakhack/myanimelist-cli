@@ -295,8 +295,6 @@ void generate_anime_api_uri (char *uri, char *username, char *endpoint, int allo
 	uri[strlen(s)] = '\0';
 	strncat(uri, username, MAX_USERNAME_LENGTH);
 	strncat(uri, "/animelist?status=", strlen("/animelist?status="));
-	n = strlen(endpoint);
-	endpoint[n] = '\0';
 	strncat(uri, endpoint, MAX_ENDPOINT_LENGTH);
 
 	/* enable/disable NSFW */
