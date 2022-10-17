@@ -109,6 +109,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "metal-oopa",
+      "name": "Sudip Banerjee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/70171925?v=4",
+      "profile": "https://portfolio-metaloopa.vercel.app/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
