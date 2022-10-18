@@ -9,7 +9,7 @@
 
 #define MIN_USERNAME_LENGTH  2
 #define MAX_USERNAME_LENGTH  16
-#define MAX_ENDPOINT_LENGTH	 15
+#define MAX_ENDPOINT_LENGTH  15
 #define BUFFER	             146
 #define PAGE_SIZE            1000
 #define CLIENT_ID            "YOUR TOKEN HERE"
