@@ -291,26 +291,26 @@ void generate_anime_api_uri (char *uri, char *username, char *endpoint, int allo
 	const char* s = "https://api.myanimelist.net/v2/users/";
 	strlcpy(uri, s, 39);
 	uri[38] = '\0';
-	strncat(uri, username, MAX_USERNAME_LENGTH);
+	strlcat(uri, username, MAX_USERNAME_LENGTH);
 	const char* s1 = "/animelist?status=";
-	strncat(uri, s1, 19);
-	strncat(uri, endpoint, MAX_ENDPOINT_LENGTH);
+	strlcat(uri, s1, 19);
+	strlcat(uri, endpoint, MAX_ENDPOINT_LENGTH);
 
 	/* enable/disable NSFW */
 	if (allow_nsfw == 1)
-		strncat(uri, "&nsfw=true", strlen("&nsfw=true")+1);
+		strlcat(uri, "&nsfw=true", strlen("&nsfw=true")+1);
 	else
-		strncat(uri, "&nsfw=false", strlen("&nsfw=false")+1);
+		strlcat(uri, "&nsfw=false", strlen("&nsfw=false")+1);
 
 	/* sort list by title ascending, descending not supported by MAL API */
-	strncat(uri, "&sort=anime_title", strlen("&sort=anime_title")+1);
+	strlcat(uri, "&sort=anime_title", strlen("&sort=anime_title")+1);
 
 	/* set number of animes per request */
-	strncat(uri, "&limit=", strlen("&limit=")+1);
+	strlcat(uri, "&limit=", strlen("&limit=")+1);
 	const int limit = 5;
 	char page_size_str[limit];
 	snprintf(page_size_str, limit, "%d", PAGE_SIZE);
-	strncat(uri, page_size_str, limit);
+	strlcat(uri, page_size_str, limit);
 }
 
 /*
