@@ -9,7 +9,7 @@
 
 #define MIN_USERNAME_LENGTH  2
 #define MAX_USERNAME_LENGTH  16
-#define MAX_ENDPOINT_LENGTH	 14
+#define MAX_ENDPOINT_LENGTH	 15
 #define BUFFER	             146
 #define PAGE_SIZE            1000
 #define CLIENT_ID            "YOUR TOKEN HERE"
@@ -298,15 +298,15 @@ void generate_anime_api_uri (char *uri, char *username, char *endpoint, int allo
 
 	/* enable/disable NSFW */
 	if (allow_nsfw == 1)
-		strlcat(uri, "&nsfw=true", strlen("&nsfw=true")+1);
+		strlcat(uri, "&nsfw=true", 12);
 	else
-		strlcat(uri, "&nsfw=false", strlen("&nsfw=false")+1);
+		strlcat(uri, "&nsfw=false", 13);
 
 	/* sort list by title ascending, descending not supported by MAL API */
-	strlcat(uri, "&sort=anime_title", strlen("&sort=anime_title")+1);
+	strlcat(uri, "&sort=anime_title", 19);
 
 	/* set number of animes per request */
-	strlcat(uri, "&limit=", strlen("&limit=")+1);
+	strlcat(uri, "&limit=", 9);
 	const int limit = 5;
 	char page_size_str[limit];
 	snprintf(page_size_str, limit, "%d", PAGE_SIZE);
