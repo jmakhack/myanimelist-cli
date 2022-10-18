@@ -20,7 +20,7 @@ ODIR:=obj
 SDIR:=src
 BDIR:=bin
 EXEC:=mya
-LIBS:=-lcurl -ljson-c
+LIBS:=-lcurl -ljson-c -lbsd
 UNAME:=$(shell uname)
 
 ifeq ($(UNAME),Darwin)

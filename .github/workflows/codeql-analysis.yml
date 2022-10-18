@@ -55,6 +55,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install libcurl4-openssl-dev
         sudo apt-get install libjson-c-dev
+        sudo apt-get install libbsd-dev
         make all
 
     # ℹ️ Command-line programs to run using the OS shell.
