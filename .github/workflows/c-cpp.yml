@@ -21,5 +21,7 @@ jobs:
       run: sudo apt-get install libcurl4-openssl-dev
     - name: Install libjson-c
       run: sudo apt-get install libjson-c-dev
+    - name: Install libbsd-dev
+      run: sudo apt-get install libbsd-dev
     - name: make all
       run: make all

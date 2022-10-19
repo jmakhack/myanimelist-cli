@@ -4,10 +4,13 @@
 #include <argp.h>
 #include <curl/curl.h>
 #include <json-c/json.h>
+#include <bsd/string.h>
 #include <regex.h>
 
 #define MIN_USERNAME_LENGTH  2
 #define MAX_USERNAME_LENGTH  16
+#define MAX_ENDPOINT_LENGTH  15
+#define BUFFER	             146
 #define PAGE_SIZE            1000
 #define CLIENT_ID            "YOUR TOKEN HERE"
 
@@ -207,7 +210,7 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
 	struct curl_slist *chunk = NULL;
 
 	char client_id_header[50] = "X-MAL-CLIENT-ID: ";
-	strcat(client_id_header, CLIENT_ID);
+	strlcat(client_id_header, CLIENT_ID, 33);
 	chunk = curl_slist_append(chunk, client_id_header);
 	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
 
@@ -242,13 +245,36 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
  * mode: type of list to retrieve
  */
 void generate_endpoint (char *endpoint, size_t mode) {
+	const char* s;
 	switch (mode) {
-	case ALL_MODE:       strcpy(endpoint, "");              break;
-	case COMPLETED_MODE: strcpy(endpoint, "completed");     break;
-	case HOLD_MODE:      strcpy(endpoint, "on_hold");       break;
-	case DROPPED_MODE:   strcpy(endpoint, "dropped");       break;
-	case PLAN_MODE:      strcpy(endpoint, "plan_to_watch"); break;
-	default:             strcpy(endpoint, "watching");      break;
+	case ALL_MODE: 
+		strlcpy(endpoint, "", 2);					      
+		break;
+	case COMPLETED_MODE:
+		s = "completed";
+		strlcpy(endpoint, s, 11);
+		endpoint[10] = '\0';  
+		break;
+	case HOLD_MODE:
+		s = "on_hold";
+		strlcpy(endpoint, s, 9);
+		endpoint[8] = '\0';  
+		break;
+	case DROPPED_MODE:   
+		s = "dropped";
+		strlcpy(endpoint, s, 9);
+		endpoint[8] = '\0';  
+		break;
+	case PLAN_MODE:
+		s = "plan_to_watch";
+		strlcpy(endpoint, s, 15);
+		endpoint[14] = '\0';  
+		break;
+	default:
+		s = "watching";
+		strlcpy(endpoint, s, 10);
+		endpoint[9] = '\0';  
+		break;
 	}
 }
 
@@ -263,26 +289,29 @@ void generate_endpoint (char *endpoint, size_t mode) {
  * allow_nsfw: allow/block nsfw results to be fetched
  */
 void generate_anime_api_uri (char *uri, char *username, char *endpoint, int allow_nsfw) {
-	strcpy(uri, "https://api.myanimelist.net/v2/users/");
-	strcat(uri, username);
-	strcat(uri, "/animelist?status=");
-	strcat(uri, endpoint);
+	const char* s = "https://api.myanimelist.net/v2/users/";
+	strlcpy(uri, s, 39);
+	uri[38] = '\0';
+	strlcat(uri, username, MAX_USERNAME_LENGTH);
+	const char* s1 = "/animelist?status=";
+	strlcat(uri, s1, 19);
+	strlcat(uri, endpoint, MAX_ENDPOINT_LENGTH);
 
 	/* enable/disable NSFW */
 	if (allow_nsfw == 1)
-		strcat(uri, "&nsfw=true");
+		strlcat(uri, "&nsfw=true", 12);
 	else
-		strcat(uri, "&nsfw=false");
+		strlcat(uri, "&nsfw=false", 13);
 
 	/* sort list by title ascending, descending not supported by MAL API */
-	strcat(uri, "&sort=anime_title");
+	strlcat(uri, "&sort=anime_title", 19);
 
 	/* set number of animes per request */
-	strcat(uri, "&limit=");
+	strlcat(uri, "&limit=", 9);
 	const int limit = 5;
 	char page_size_str[limit];
 	snprintf(page_size_str, limit, "%d", PAGE_SIZE);
-	strcat(uri, page_size_str);
+	strlcat(uri, page_size_str, limit);
 }
 
 /*
@@ -360,9 +389,11 @@ void get_new_uri (char *uri, struct json_object *json) {
 	struct json_object *paging = json_object_object_get(json, "paging");
 	struct json_object *next;
 	if (!json_object_object_get_ex(paging, "next", &next)) {
-		strcpy(uri, "");
+		strlcpy(uri, "", 2);
 	} else {
-		strcpy(uri, json_object_get_string(next));
+		const char* s = json_object_get_string(next);
+		strlcpy(uri, s, BUFFER);
+		uri[BUFFER] = '\0';
 	}
 }
 

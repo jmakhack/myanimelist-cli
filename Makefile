@@ -14,13 +14,13 @@
 
 .DEFAULT_GOAL:=all
 CC:=gcc
-CFLAGS:=-c -g -Wall
+CFLAGS:=-c -g -Wall -std=c11
 DIRGUARD=@mkdir -p $(@D)
 ODIR:=obj
 SDIR:=src
 BDIR:=bin
 EXEC:=mya
-LIBS:=-lcurl -ljson-c
+LIBS:=-lcurl -ljson-c -lbsd
 UNAME:=$(shell uname)
 
 ifeq ($(UNAME),Darwin)
