@@ -67,3 +67,4 @@ The following artifacts / tools are used by and included in the extension as-is:
 -   Argp: [https://www.gnu.org/software/libc/manual/html_node/Argp.html](https://www.gnu.org/software/libc/manual/html_node/Argp.html)
 -   Curl: [https://curl.se/libcurl/c/](https://curl.se/libcurl/c/)
 -   Json-C: [http://json-c.github.io/json-c/](http://json-c.github.io/json-c/)
+-   Libbsd: [https://libbsd.freedesktop.org/wiki/](https://libbsd.freedesktop.org/wiki/)
