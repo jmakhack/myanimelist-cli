@@ -245,12 +245,13 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
  * mode: type of list to retrieve
  */
 void generate_endpoint (char *endpoint, size_t mode) {
+	const char* s;
 	switch (mode) {
 	case ALL_MODE: 
 		strlcpy(endpoint, "", 2);					      
 		break;
 	case COMPLETED_MODE:
-		const char* s = "completed";
+		s = "completed";
 		strlcpy(endpoint, s, 11);
 		endpoint[10] = '\0';  
 		break;
