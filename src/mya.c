@@ -23,6 +23,11 @@
 #define OPT_ALL          'a'
 #define OPT_SFW          's'
 
+/* constants for ANSI color codes */
+#define ANSI_CODE_CYAN   "\033[0;36m"
+#define ANSI_CODE_YELLOW "\033[1;33m"
+#define ANSI_CODE_RESET  "\033[0m"
+
 /* initialize argp vars */
 const char *argp_program_version     = "mya v0.1.0";
 const char *argp_program_bug_address = "<jmakhack@protonmail.com>";
@@ -371,9 +376,15 @@ void print_anime_list (struct json_object *anime_list, size_t page, char *list_n
 		struct json_object *anime = json_object_array_get_idx(anime_list, i);
 		struct json_object *anime_node = json_object_object_get(anime, "node");
 		struct json_object *anime_title = json_object_object_get(anime_node, "title");
+		char *color = NULL;
 
+		/* Printing in alternate colors for better readability */
+		if (i % 2)
+			color = ANSI_CODE_YELLOW;
+		else
+			color = ANSI_CODE_CYAN;
 		/* print each anime title in a numbered list format */
-		printf("%zu. %s\n", (i+1)+(PAGE_SIZE*(page-1)), json_object_get_string(anime_title));
+		printf("%s%zu. %s%s\n", color, (i+1)+(PAGE_SIZE*(page-1)), json_object_get_string(anime_title), ANSI_CODE_RESET);
 	}
 }
 
