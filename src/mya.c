@@ -210,7 +210,7 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
 	struct curl_slist *chunk = NULL;
 
 	char client_id_header[50] = "X-MAL-CLIENT-ID: ";
-	strlcat(client_id_header, CLIENT_ID, 33);
+	strlcat(client_id_header, CLIENT_ID, strlen(client_id_header) + 33);
 	chunk = curl_slist_append(chunk, client_id_header);
 	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
 
@@ -290,28 +290,27 @@ void generate_endpoint (char *endpoint, size_t mode) {
  */
 void generate_anime_api_uri (char *uri, char *username, char *endpoint, int allow_nsfw) {
 	const char* s = "https://api.myanimelist.net/v2/users/";
-	strlcpy(uri, s, 39);
-	uri[38] = '\0';
-	strlcat(uri, username, MAX_USERNAME_LENGTH);
+	strlcpy(uri, s, 38);
+	strlcat(uri, username, strlen(uri) + MAX_USERNAME_LENGTH);
 	const char* s1 = "/animelist?status=";
-	strlcat(uri, s1, 19);
-	strlcat(uri, endpoint, MAX_ENDPOINT_LENGTH);
+	strlcat(uri, s1, strlen(uri) + 19);
+	strlcat(uri, endpoint, strlen(uri) + MAX_ENDPOINT_LENGTH);
 
 	/* enable/disable NSFW */
 	if (allow_nsfw == 1)
-		strlcat(uri, "&nsfw=true", 12);
+		strlcat(uri, "&nsfw=true", strlen(uri) + 12);
 	else
-		strlcat(uri, "&nsfw=false", 13);
+		strlcat(uri, "&nsfw=false", strlen(uri) + 13);
 
 	/* sort list by title ascending, descending not supported by MAL API */
-	strlcat(uri, "&sort=anime_title", 19);
+	strlcat(uri, "&sort=anime_title", strlen(uri) + 19);
 
 	/* set number of animes per request */
-	strlcat(uri, "&limit=", 9);
+	strlcat(uri, "&limit=", strlen(uri) + 9);
 	const int limit = 5;
 	char page_size_str[limit];
 	snprintf(page_size_str, limit, "%d", PAGE_SIZE);
-	strlcat(uri, page_size_str, limit);
+	strlcat(uri, page_size_str, strlen(uri) + limit);
 }
 
 /*
