@@ -421,7 +421,8 @@ int main (int argc, char *argv[]) {
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
 	/* setup uri to fetch based on arguments */
-	char endpoint[14], uri[146];
+	char endpoint[14];
+	char uri[146];
 	generate_endpoint(endpoint, arguments.mode);
 	generate_anime_api_uri(uri, arguments.args[0], endpoint, arguments.nsfw);
 
