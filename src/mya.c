@@ -10,7 +10,6 @@
 #define MIN_USERNAME_LENGTH  2
 #define MAX_USERNAME_LENGTH  16
 #define MAX_ENDPOINT_LENGTH  15
-#define BUFFER	             146
 #define PAGE_SIZE            1000
 #define CLIENT_ID            "YOUR TOKEN HERE"
 
@@ -211,11 +210,14 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
 		return CURLE_FAILED_INIT;
 	}
 
-	/* set the client id */
+	/* set the client id header */
 	struct curl_slist *chunk = NULL;
+	size_t client_id_header_size = 50;
+	char client_id_header[client_id_header_size];
+	strlcpy(client_id_header, "X-MAL-CLIENT-ID:", client_id_header_size);
+	strlcat(client_id_header, CLIENT_ID, client_id_header_size);
 
-	char client_id_header[50] = "X-MAL-CLIENT-ID: ";
-	strlcat(client_id_header, CLIENT_ID, strlen(client_id_header) + 33);
+	/* add client id header to request */
 	chunk = curl_slist_append(chunk, client_id_header);
 	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, chunk);
 
@@ -247,38 +249,34 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
  * Generates the appropriate endpoint based on the inputted mode
  *
  * endpoint: string to store the endpoint value
+ * endpoint_size: size of endpoint string buffer
  * mode: type of list to retrieve
  */
-void generate_endpoint (char *endpoint, size_t mode) {
+void generate_endpoint (char *endpoint, size_t endpoint_size, size_t mode) {
 	const char* s;
 	switch (mode) {
 	case ALL_MODE: 
-		strlcpy(endpoint, "", 2);					      
+		strlcpy(endpoint, "", endpoint_size);
 		break;
 	case COMPLETED_MODE:
 		s = "completed";
-		strlcpy(endpoint, s, 11);
-		endpoint[10] = '\0';  
+		strlcpy(endpoint, s, endpoint_size);
 		break;
 	case HOLD_MODE:
 		s = "on_hold";
-		strlcpy(endpoint, s, 9);
-		endpoint[8] = '\0';  
+		strlcpy(endpoint, s, endpoint_size);
 		break;
 	case DROPPED_MODE:   
 		s = "dropped";
-		strlcpy(endpoint, s, 9);
-		endpoint[8] = '\0';  
+		strlcpy(endpoint, s, endpoint_size);
 		break;
 	case PLAN_MODE:
 		s = "plan_to_watch";
-		strlcpy(endpoint, s, 15);
-		endpoint[14] = '\0';  
+		strlcpy(endpoint, s, endpoint_size);
 		break;
 	default:
 		s = "watching";
-		strlcpy(endpoint, s, 10);
-		endpoint[9] = '\0';  
+		strlcpy(endpoint, s, endpoint_size);
 		break;
 	}
 }
@@ -289,33 +287,34 @@ void generate_endpoint (char *endpoint, size_t mode) {
  * Generates the base uri for retrieving user anime list data
  *
  * uri: string to store the uri
+ * uri_size: size of uri string buffer
  * username: user to fetch the data of
  * endpoint: endpoint to fetch the data from
  * allow_nsfw: allow/block nsfw results to be fetched
  */
-void generate_anime_api_uri (char *uri, char *username, char *endpoint, int allow_nsfw) {
+void generate_anime_api_uri (char *uri, size_t uri_size, char *username, char *endpoint, int allow_nsfw) {
 	const char* s = "https://api.myanimelist.net/v2/users/";
-	strlcpy(uri, s, 38);
-	strlcat(uri, username, strlen(uri) + MAX_USERNAME_LENGTH);
+	strlcpy(uri, s, uri_size);
+	strlcat(uri, username, uri_size);
 	const char* s1 = "/animelist?status=";
-	strlcat(uri, s1, strlen(uri) + 19);
-	strlcat(uri, endpoint, strlen(uri) + MAX_ENDPOINT_LENGTH);
+	strlcat(uri, s1, uri_size);
+	strlcat(uri, endpoint, uri_size);
 
 	/* enable/disable NSFW */
 	if (allow_nsfw == 1)
-		strlcat(uri, "&nsfw=true", strlen(uri) + 12);
+		strlcat(uri, "&nsfw=true", uri_size);
 	else
-		strlcat(uri, "&nsfw=false", strlen(uri) + 13);
+		strlcat(uri, "&nsfw=false", uri_size);
 
 	/* sort list by title ascending, descending not supported by MAL API */
-	strlcat(uri, "&sort=anime_title", strlen(uri) + 19);
+	strlcat(uri, "&sort=anime_title", uri_size);
 
 	/* set number of animes per request */
-	strlcat(uri, "&limit=", strlen(uri) + 9);
+	strlcat(uri, "&limit=", uri_size);
 	const int limit = 5;
 	char page_size_str[limit];
 	snprintf(page_size_str, limit, "%d", PAGE_SIZE);
-	strlcat(uri, page_size_str, strlen(uri) + limit);
+	strlcat(uri, page_size_str, uri_size);
 }
 
 /*
@@ -393,17 +392,17 @@ void print_anime_list (struct json_object *anime_list, size_t page, char *list_n
  * Get the next page of the list from the json
  * 
  * uri: current uri buffer
+ * uri_size: size of uri string buffer
  * json: the json object that contains the nex uri
 */
-void get_new_uri (char *uri, struct json_object *json) {
+void get_new_uri (char *uri, size_t uri_size, struct json_object *json) {
 	struct json_object *paging = json_object_object_get(json, "paging");
 	struct json_object *next;
 	if (!json_object_object_get_ex(paging, "next", &next)) {
-		strlcpy(uri, "", 2);
+		strlcpy(uri, "", uri_size);
 	} else {
 		const char* s = json_object_get_string(next);
-		strlcpy(uri, s, BUFFER);
-		uri[BUFFER] = '\0';
+		strlcpy(uri, s, uri_size);
 	}
 }
 
@@ -431,10 +430,12 @@ int main (int argc, char *argv[]) {
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
 	/* setup uri to fetch based on arguments */
-	char endpoint[14];
-	char uri[146];
-	generate_endpoint(endpoint, arguments.mode);
-	generate_anime_api_uri(uri, arguments.args[0], endpoint, arguments.nsfw);
+	size_t endpoint_size = 14;
+	size_t uri_size = 146;
+	char endpoint[endpoint_size];
+	char uri[uri_size];
+	generate_endpoint(endpoint, endpoint_size, arguments.mode);
+	generate_anime_api_uri(uri, uri_size, arguments.args[0], endpoint, arguments.nsfw);
 
 	/* iterator value for paginated data */
 	size_t page_num = 0;
@@ -457,7 +458,7 @@ int main (int argc, char *argv[]) {
 		}
 
 		/* get the next page of the list */
-		get_new_uri(uri, json);
+		get_new_uri(uri, uri_size, json);
 
 		/* print out the anime list */
 		print_anime_list(anime_list, page_num, endpoint);
