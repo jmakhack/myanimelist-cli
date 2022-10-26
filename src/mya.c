@@ -379,7 +379,8 @@ void print_anime_list (struct json_object *anime_list, size_t page, char *list_n
 		const char* color = (((int)i % 2) == 1) ? ANSI_CODE_YELLOW : ANSI_CODE_CYAN;
 
 		/* print each anime title in a numbered list format */
-		printf("%s%zu. %s%s\n", color, ((int)i + 1) + (PAGE_SIZE * ((int)page - 1)), json_object_get_string(anime_title), ANSI_CODE_RESET);
+		const int list_num = ((int)i + 1) + (PAGE_SIZE * ((int)page - 1));
+		printf("%s%d. %s%s\n", color, list_num, json_object_get_string(anime_title), ANSI_CODE_RESET);
 	}
 }
 
