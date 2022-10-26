@@ -255,8 +255,9 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
 void generate_endpoint (char *endpoint, size_t endpoint_size, size_t mode) {
 	const char* s;
 	switch (mode) {
-	case ALL_MODE: 
-		strlcpy(endpoint, "", endpoint_size);
+	case ALL_MODE:
+		s = "all";
+		strlcpy(endpoint, s, endpoint_size);
 		break;
 	case COMPLETED_MODE:
 		s = "completed";
