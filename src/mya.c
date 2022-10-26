@@ -374,7 +374,6 @@ void print_anime_list (struct json_object *anime_list, size_t page, char *list_n
 		struct json_object *anime = json_object_array_get_idx(anime_list, i);
 		struct json_object *anime_node = json_object_object_get(anime, "node");
 		struct json_object *anime_title = json_object_object_get(anime_node, "title");
-		char *color = NULL;
 
 		/* Printing in alternate colors for better readability */
 		const char* color = (i % 2 == 1) ? ANSI_CODE_YELLOW : ANSI_CODE_CYAN;
