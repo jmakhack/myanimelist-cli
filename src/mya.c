@@ -263,7 +263,7 @@ void generate_endpoint (char *endpoint, size_t endpoint_size, size_t mode) {
 		strlcpy(endpoint, s, endpoint_size);
 		break;
 	case HOLD_MODE:
-		s = "on_hold";
+		s = "on hold";
 		strlcpy(endpoint, s, endpoint_size);
 		break;
 	case DROPPED_MODE:   
@@ -271,7 +271,7 @@ void generate_endpoint (char *endpoint, size_t endpoint_size, size_t mode) {
 		strlcpy(endpoint, s, endpoint_size);
 		break;
 	case PLAN_MODE:
-		s = "plan_to_watch";
+		s = "plan to watch";
 		strlcpy(endpoint, s, endpoint_size);
 		break;
 	default:
