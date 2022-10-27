@@ -263,7 +263,7 @@ void generate_endpoint (char *endpoint, size_t endpoint_size, size_t mode) {
 		strlcpy(endpoint, s, endpoint_size);
 		break;
 	case HOLD_MODE:
-		s = "on hold";
+		s = "on_hold";
 		strlcpy(endpoint, s, endpoint_size);
 		break;
 	case DROPPED_MODE:   
@@ -271,7 +271,7 @@ void generate_endpoint (char *endpoint, size_t endpoint_size, size_t mode) {
 		strlcpy(endpoint, s, endpoint_size);
 		break;
 	case PLAN_MODE:
-		s = "plan to watch";
+		s = "plan_to_watch";
 		strlcpy(endpoint, s, endpoint_size);
 		break;
 	default:
@@ -364,6 +364,12 @@ void print_anime_list (struct json_object *anime_list, size_t page, char *list_n
     switch (mode) {
         case ALL_MODE:
             disp_name = "all";
+            break;
+        case HOLD_MODE:
+            disp_name = "on hold";
+            break;
+        case PLAN_MODE:
+            disp_name = "plan to watch";
             break;
         default:
             disp_name = list_name;
