@@ -256,8 +256,7 @@ void generate_endpoint (char *endpoint, size_t endpoint_size, size_t mode) {
 	const char* s;
 	switch (mode) {
 	case ALL_MODE:
-		s = "all";
-		strlcpy(endpoint, s, endpoint_size);
+		strlcpy(endpoint, "", endpoint_size);
 		break;
 	case COMPLETED_MODE:
 		s = "completed";
@@ -357,16 +356,26 @@ void fetch_curl_payload (struct curl_fetch_st *curl_fetch, char *paginated_uri) 
  * page: page number of paginated list
  * list_name: name of the type of list being printed
  */
-void print_anime_list (struct json_object *anime_list, size_t page, char *list_name) {
+void print_anime_list (struct json_object *anime_list, size_t page, char *list_name, size_t mode) {
 	/* get number of anime in anime list */
 	size_t n_anime = json_object_array_length(anime_list);
+    const char *disp_name;
 
-	/* print list header before the first page of data */
+    switch (mode) {
+        case ALL_MODE:
+            disp_name = "all";
+            break;
+        default:
+            disp_name = list_name;
+            break;
+    }
+
+    /* print list header before the first page of data */
 	if (page == 1) {
 		if (n_anime == PAGE_SIZE) {
-			printf("%s %d+ anime\n", list_name, PAGE_SIZE);
+			printf("%s %d+ anime\n", disp_name, PAGE_SIZE);
 		} else {
-			printf("%s %zu anime\n", list_name, n_anime);
+			printf("%s %zu anime\n", disp_name, n_anime);
 		}
 	}
 
@@ -460,7 +469,7 @@ int main (int argc, char *argv[]) {
 		get_new_uri(uri, uri_size, json);
 
 		/* print out the anime list */
-		print_anime_list(anime_list, page_num, endpoint);
+		print_anime_list(anime_list, page_num, endpoint, arguments.mode);
 
 		/* cleanup json */
 		json_object_put(json);
