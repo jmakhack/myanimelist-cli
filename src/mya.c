@@ -355,22 +355,23 @@ void fetch_curl_payload (struct curl_fetch_st *curl_fetch, char *paginated_uri) 
  * anime_list: anime list to print
  * page: page number of paginated list
  * list_name: name of the type of list being printed
+ * mode: type of list retrieved
  */
 void print_anime_list (struct json_object *anime_list, size_t page, char *list_name, size_t mode) {
 	/* get number of anime in anime list */
 	size_t n_anime = json_object_array_length(anime_list);
-    const char *disp_name;
+	const char *disp_name;
 
-    switch (mode) {
-        case ALL_MODE:
-            disp_name = "all";
-            break;
-        default:
-            disp_name = list_name;
-            break;
-    }
+	switch (mode) {
+	case ALL_MODE:
+		disp_name = "all";
+		break;
+	default:
+		disp_name = list_name;
+		break;
+	}
 
-    /* print list header before the first page of data */
+	/* print list header before the first page of data */
 	if (page == 1) {
 		if (n_anime == PAGE_SIZE) {
 			printf("%s %d+ anime\n", disp_name, PAGE_SIZE);
