@@ -355,6 +355,7 @@ void fetch_curl_payload (struct curl_fetch_st *curl_fetch, char *paginated_uri) 
  * anime_list: anime list to print
  * page: page number of paginated list
  * list_name: name of the type of list being printed
+ * mode: type of list retrieved
  */
 void print_anime_list (struct json_object *anime_list, size_t page, char *list_name, size_t mode) {
 	/* get number of anime in anime list */
