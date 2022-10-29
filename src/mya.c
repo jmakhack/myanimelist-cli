@@ -25,6 +25,7 @@
 /* constants for ANSI color codes */
 #define ANSI_CODE_CYAN   "\033" "[0;36m"
 #define ANSI_CODE_YELLOW "\033" "[1;33m"
+#define ANSI_CODE_MAGENTA "\033" "[1;35m"
 #define ANSI_CODE_RESET  "\033" "[0m"
 
 /* initialize argp vars */
@@ -374,9 +375,11 @@ void print_anime_list (struct json_object *anime_list, size_t page, char *list_n
 	/* print list header before the first page of data */
 	if (page == 1) {
 		if (n_anime == PAGE_SIZE) {
-			printf("%s %d+ anime\n", disp_name, PAGE_SIZE);
+			printf("%s%s %d+ anime\n%s", ANSI_CODE_MAGENTA, list_name,
+					PAGE_SIZE, ANSI_CODE_RESET);
 		} else {
-			printf("%s %zu anime\n", disp_name, n_anime);
+			printf("%s%s %zu anime\n%s", ANSI_CODE_MAGENTA, list_name, n_anime,
+					ANSI_CODE_RESET);
 		}
 	}
 
