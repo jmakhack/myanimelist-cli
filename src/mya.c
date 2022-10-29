@@ -381,10 +381,10 @@ void print_anime_list (struct json_object *anime_list, size_t page, char *list_n
     /* print list header before the first page of data */
 	if (page == 1) {
 		if (n_anime == PAGE_SIZE) {
-			printf("%s%s %d+ anime\n%s", ANSI_CODE_MAGENTA, list_name,
+			printf("%s%s %d+ anime\n%s", ANSI_CODE_MAGENTA, disp_name,
 					PAGE_SIZE, ANSI_CODE_RESET);
 		} else {
-			printf("%s%s %zu anime\n%s", ANSI_CODE_MAGENTA, list_name, n_anime,
+			printf("%s%s %zu anime\n%s", ANSI_CODE_MAGENTA, disp_name, n_anime,
 					ANSI_CODE_RESET);
 		}
 	}
