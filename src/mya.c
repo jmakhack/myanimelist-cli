@@ -71,31 +71,30 @@ struct curl_fetch_st {
  */
 void validate_username (char *username) {
 	/* create username buffer to ensure null terminated string */
-	char username_buf[MAX_USERNAME_LENGTH+2];
-	strncpy(username_buf, username, sizeof(username_buf)-1);
-	username_buf[sizeof(username_buf)-1] = '\0';
+	char username_buf[MAX_USERNAME_LENGTH + 2];
+	strlcpy(username_buf, username, sizeof(username_buf));
 	size_t username_len = strlen(username_buf);
 
 	/* initialize regex vars */
 	regex_t regex;
-	char *pattern = "^[a-zA-Z0-9_-]+$";
+	const char *pattern = "^[a-zA-Z0-9_-]+$";
 	size_t nmatch = 1;
 	regmatch_t pmatch[1];
 
 	/* check if username is acceptable length */	
-	if ((username_len < MIN_USERNAME_LENGTH) || (username_len > MAX_USERNAME_LENGTH)) {
+	if (((int)username_len < MIN_USERNAME_LENGTH) || ((int)username_len > MAX_USERNAME_LENGTH)) {
 		fprintf(stderr, "Username must be between %d and %d characters in length\n", MIN_USERNAME_LENGTH, MAX_USERNAME_LENGTH);
 		exit(argp_err_exit_status);
 	}
 
 	/* check if regex pattern is valid */
-	if (regcomp(&regex, pattern, REG_EXTENDED)) {
+	if (regcomp(&regex, pattern, REG_EXTENDED) != 0) {
 		fprintf(stderr, "Failed to compile username validation regex\n");
 		exit(argp_err_exit_status);
 	}
 
 	/* check if username contains only letters, numbers, underscores and dashes */
-	if (regexec(&regex, username, nmatch, pmatch, 0)) {
+	if (regexec(&regex, username, nmatch, pmatch, 0) != 0) {
 		fprintf(stderr, "Please enter a valid username (letters, numbers, underscores and dashes only)\n");
 		exit(argp_err_exit_status);
 	}
@@ -131,14 +130,18 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state) {
 	/* parse arguments */
 	case ARGP_KEY_ARG:
 		/* show usage info if more than one argument given */
-		if (state->arg_num >= 1) argp_usage(state);
+		if (state->arg_num >= 1) {
+			argp_usage(state);
+		}
 		validate_username(arg);
 		arguments->args[state->arg_num] = arg;
 		break;
 
 	/* validate number of arguments */
 	case ARGP_KEY_END:
-		if (state->arg_num < 1) argp_usage(state);
+		if (state->arg_num < 1) {
+			argp_usage(state);
+		}
 		break;
 
 	/* error if invalid option provided */
@@ -170,7 +173,7 @@ size_t curl_callback (void *contents, size_t size, size_t nmemb, void *userp) {
 	struct curl_fetch_st *p = (struct curl_fetch_st *) userp;
 
 	/* allocate enough memory to hold data payload */
-	char *temp = realloc(p->payload, p->size + rsize + 1);
+	char *temp = realloc(p->payload, (int)p->size + (int)rsize + 1);
 
 	/* error if memory allocation fails */
 	if (!temp) {
@@ -302,10 +305,11 @@ void generate_anime_api_uri (char *uri, size_t uri_size, char *username, char *e
 	strlcat(uri, endpoint, uri_size);
 
 	/* enable/disable NSFW */
-	if (allow_nsfw == 1)
+	if (allow_nsfw == 1) {
 		strlcat(uri, "&nsfw=true", uri_size);
-	else
+	} else {
 		strlcat(uri, "&nsfw=false", uri_size);
+	}
 
 	/* sort list by title ascending, descending not supported by MAL API */
 	strlcat(uri, "&sort=anime_title", uri_size);
@@ -363,6 +367,7 @@ void print_anime_list (struct json_object *anime_list, size_t page, char *list_n
 	size_t n_anime = json_object_array_length(anime_list);
     const char *disp_name;
 
+    /* set list display name based on the mode setting */
     switch (mode) {
         case ALL_MODE:
             disp_name = "all";
@@ -379,8 +384,8 @@ void print_anime_list (struct json_object *anime_list, size_t page, char *list_n
     }
 
     /* print list header before the first page of data */
-	if (page == 1) {
-		if (n_anime == PAGE_SIZE) {
+	if ((int)page == 1) {
+		if ((int)n_anime == PAGE_SIZE) {
 			printf("%s%s %d+ anime\n%s", ANSI_CODE_MAGENTA, disp_name,
 					PAGE_SIZE, ANSI_CODE_RESET);
 		} else {
@@ -459,7 +464,7 @@ int main (int argc, char *argv[]) {
 	size_t page_num = 0;
 
 	/* main loop for printing paginated anime list */
-	while (++page_num) {
+	while ((int)(++page_num) > 0) {
 		/* fetch data from uri */
 		struct curl_fetch_st curl_fetch;
 		fetch_curl_payload(&curl_fetch, uri);
@@ -485,7 +490,9 @@ int main (int argc, char *argv[]) {
 		json_object_put(json);
 
 		/* exit main loop after all pages have been looped through */
-		if (uri[0] == '\0')  break;
+		if (uri[0] == '\0') {
+			break;
+		}
 	}
 	return EXIT_SUCCESS;
 }
