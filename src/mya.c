@@ -72,8 +72,7 @@ struct curl_fetch_st {
 void validate_username (char *username) {
 	/* create username buffer to ensure null terminated string */
 	char username_buf[MAX_USERNAME_LENGTH + 2];
-	strncpy(username_buf, username, (int)sizeof(username_buf) - 1);
-	username_buf[(int)sizeof(username_buf) - 1] = '\0';
+	strlcpy(username_buf, username, sizeof(username_buf));
 	size_t username_len = strlen(username_buf);
 
 	/* initialize regex vars */
