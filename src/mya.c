@@ -23,10 +23,10 @@
 #define OPT_SFW          's'
 
 /* constants for ANSI color codes */
-#define ANSI_CODE_CYAN   "\033" "[0;36m"
-#define ANSI_CODE_YELLOW "\033" "[1;33m"
-#define ANSI_CODE_MAGENTA "\033" "[1;35m"
-#define ANSI_CODE_RESET  "\033" "[0m"
+#define ANSI_CODE_CYAN     "\033" "[0;36m"
+#define ANSI_CODE_YELLOW   "\033" "[1;33m"
+#define ANSI_CODE_MAGENTA  "\033" "[1;35m"
+#define ANSI_CODE_RESET    "\033" "[0m"
 
 /* initialize argp vars */
 const char *argp_program_version     = "mya v0.1.0";
