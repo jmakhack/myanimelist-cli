@@ -8,7 +8,7 @@
 #                                _|_|
 #
 #
-# Copyright (C) 2020 - 2021, Joshua Mak, <jmakhack@protonmail.com>, et al.
+# Copyright (C) 2020 - 2023, Joshua Mak, et al.
 #
 ############################################################################
 

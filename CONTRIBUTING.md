@@ -6,9 +6,7 @@ Thanks for looking into how you're able to contribute to the project!
 
 Check the [Issues](https://github.com/jmakhack/myanimelist-cli/issues) tab on GitHub to check the open issues.
 
-If you have any questions, please join the [Discord](https://discord.gg/RTgxfFW9mS) for discussion and help. 
-
-Otherwise, feel free to ping @jmakhack in the comments of any issue.
+Feel free to ping @jmakhack in the comments of any issue.
 
 ## Building the Project
 
