@@ -146,6 +146,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "npranav7619",
+      "name": "N.Pranav Krishna",
+      "avatar_url": "https://avatars.githubusercontent.com/u/52345192?v=4",
+      "profile": "https://npranav7619.github.io/",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -154,5 +164,6 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true,
-  "commitConvention": "angular"
+  "commitConvention": "angular",
+  "commitType": "docs"
 }
