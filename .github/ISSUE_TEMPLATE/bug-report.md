@@ -20,4 +20,4 @@ Operating System: \[e.g. macOS Catalina\]
 ## Additional Context
 <!-- Add any other context about the problem here. -->
 
-Please read through the [Contributing to the Project](../../CONTRIBUTING.md) document before working on this project.
+Please read through the [Contributing to the Project](https://github.com/jmakhack/myanimelist-cli/blob/master/CONTRIBUTING.md) document before working on this project.
