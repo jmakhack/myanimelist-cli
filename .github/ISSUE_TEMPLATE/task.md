@@ -14,4 +14,4 @@ title: "[TASK] "
 ## Additional Context
 <!-- Any additional context needed to describe the task -->
 
-Please read through the [Contributing to the Project](../../CONTRIBUTING.md) document before working on this project.
+Please read through the [Contributing to the Project](https://github.com/jmakhack/myanimelist-cli/blob/master/CONTRIBUTING.md) document before working on this project.
