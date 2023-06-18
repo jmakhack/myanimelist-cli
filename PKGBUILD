@@ -1,9 +1,9 @@
-# Maintainer: Name <email>
+# Maintainer: Josh Mak <jmak2015@gmail.com>
 # Co-Maintainer: N.Pranav Krishna <npranav7619@gmail.com>
 pkgname=mya-git
 pkgver=r134.587fa4f
 pkgrel=1
-pkgdesc="A CLI version for fetching data from MyAnimeList"
+pkgdesc="A CLI tool for fetching data from MyAnimeList"
 arch=('x86_64')
 url="https://github.com/jmakhack/myanimelist-cli/tree/master"
 license=('MIT')
