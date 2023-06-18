@@ -11,7 +11,7 @@
 #define MAX_USERNAME_LENGTH  16
 #define MAX_ENDPOINT_LENGTH  15
 #define PAGE_SIZE            1000
-#define CLIENT_ID            "YOUR TOKEN HERE"
+#define CLIENT_ID            getenv("MYANIMELIST_CLIENT_ID")
 
 /* define constants for program options */
 #define OPT_WATCHING     'w'
