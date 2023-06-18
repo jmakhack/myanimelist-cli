@@ -23,5 +23,7 @@ jobs:
       run: sudo apt-get install libjson-c-dev
     - name: Install libbsd-dev
       run: sudo apt-get install libbsd-dev
+    - name: cmake
+      run: cmake CMakeLists.txt
     - name: make all
       run: make all
