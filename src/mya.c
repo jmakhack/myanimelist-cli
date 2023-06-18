@@ -439,9 +439,9 @@ void get_new_uri (char *uri, size_t uri_size, struct json_object *json) {
  * returns: 0 if success, otherwise error number
  */
 int main (int argc, char *argv[]) {
-	/* exit early if Client ID is not provided */
-	if (strcmp(CLIENT_ID, "YOUR TOKEN HERE") == 0) {
-		fprintf(stderr, "Client ID has not been provided\n");
+	/* exit early if Client ID environment variable does not exist */
+	if (CLIENT_ID == NULL) {
+		fprintf(stderr, "MYANIMELIST_CLIENT_ID environment variable does not exist\n");
 		exit(EXIT_FAILURE);
 	}
 
