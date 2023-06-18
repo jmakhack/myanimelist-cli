@@ -13,7 +13,7 @@ Feel free to ping @jmakhack in the comments of any issue.
 To build the project, execute the following steps:
 
 ```
-- make clean
+- cmake CMakeLists.txt
 - make all
 - ./bin/mya -V
 ```
