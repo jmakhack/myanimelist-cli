@@ -11,7 +11,8 @@
 #define MAX_USERNAME_LENGTH  16
 #define MAX_ENDPOINT_LENGTH  15
 #define PAGE_SIZE            1000
-#define CLIENT_ID            getenv("MYANIMELIST_CLIENT_ID")
+#define CLIENT_ID_ENV        getenv("MYANIMELIST_CLIENT_ID")
+#define CLIENT_ID            "YOUR TOKEN HERE"
 
 /* define constants for program options */
 #define OPT_WATCHING     'w'
@@ -218,7 +219,13 @@ CURLcode curl_fetch_url (CURL *curl, const char *url, struct curl_fetch_st *fetc
 	size_t client_id_header_size = 50;
 	char client_id_header[client_id_header_size];
 	strlcpy(client_id_header, "X-MAL-CLIENT-ID:", client_id_header_size);
-	strlcat(client_id_header, CLIENT_ID, client_id_header_size);
+
+	/* if environment variable doesn't exist, use hard coded client id value */
+	if (CLIENT_ID_ENV == NULL) {
+		strlcat(client_id_header, CLIENT_ID, client_id_header_size);
+	} else {
+		strlcat(client_id_header, CLIENT_ID_ENV, client_id_header_size);
+	}
 
 	/* add client id header to request */
 	chunk = curl_slist_append(chunk, client_id_header);
@@ -439,9 +446,9 @@ void get_new_uri (char *uri, size_t uri_size, struct json_object *json) {
  * returns: 0 if success, otherwise error number
  */
 int main (int argc, char *argv[]) {
-	/* exit early if Client ID environment variable does not exist */
-	if (CLIENT_ID == NULL) {
-		fprintf(stderr, "MYANIMELIST_CLIENT_ID environment variable does not exist\n");
+	/* exit early if client id is not provided */
+	if (CLIENT_ID_ENV == NULL && strcmp(CLIENT_ID, "YOUR TOKEN HERE") == 0) {
+		fprintf(stderr, "Client ID has not been provided\n");
 		exit(EXIT_FAILURE);
 	}
 
