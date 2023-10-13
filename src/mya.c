@@ -448,7 +448,14 @@ void get_new_uri (char *uri, size_t uri_size, struct json_object *json) {
 int main (int argc, char *argv[]) {
 	/* exit early if client id is not provided */
 	if (CLIENT_ID_ENV == NULL && strcmp(CLIENT_ID, "YOUR TOKEN HERE") == 0) {
-		fprintf(stderr, "Client ID has not been provided\n");
+		fprintf(stderr, "Client ID has not been provided\n\n");
+		fprintf(stderr, "Here are the Steps to get your MyAnimeList Client ID (skip if you already have the Client ID):\n");
+		fprintf(stderr, "\t1. Go to this link https://myanimelist.net/apiconfig \n");
+		fprintf(stderr, "\t2. Click on Create ID.\n");
+		fprintf(stderr, "\t3. Fill the Form with appropriate details.\n");
+		fprintf(stderr, "\t4. Copy the Client ID (the weird alpha-numeric value next to the label.\n\n");
+
+		fprintf(stderr, "After copying the Client ID, open \'./src/mya.c\' and replace \'MYANIMELIST_CLIENT_ID\' and \'YOUR TOKEN HERE\' with the Client ID on line no. 14 & 15.\n");
 		exit(EXIT_FAILURE);
 	}
 
