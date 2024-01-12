@@ -5,7 +5,7 @@ myanimelist-cli is a minimalistic command line interface for fetching user anime
 [![C/C++ CI](https://github.com/jmakhack/mya/actions/workflows/c-cpp.yml/badge.svg?branch=master)](https://github.com/jmakhack/mya/actions/workflows/c-cpp.yml)
 [![CodeQL](https://github.com/jmakhack/mya/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jmakhack/mya/actions/workflows/codeql-analysis.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a30e5356c06e4381a0b5ea92aba65ada)](https://www.codacy.com/gh/jmakhack/myanimelist-cli/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jmakhack/myanimelist-cli&amp;utm_campaign=Badge_Grade)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-16-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-17-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Usage
@@ -75,6 +75,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Godson-Gnanaraj"><img src="https://avatars.githubusercontent.com/u/30664729?v=4?s=100" width="100px;" alt="Godson"/><br /><sub><b>Godson</b></sub></a><br /><a href="https://github.com/jmakhack/myanimelist-cli/commits?author=Godson-Gnanaraj" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://npranav7619.github.io/"><img src="https://avatars.githubusercontent.com/u/52345192?v=4?s=100" width="100px;" alt="N.Pranav Krishna"/><br /><sub><b>N.Pranav Krishna</b></sub></a><br /><a href="https://github.com/jmakhack/myanimelist-cli/commits?author=npranav7619" title="Code">💻</a> <a href="#maintenance-npranav7619" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/viv1kk"><img src="https://avatars.githubusercontent.com/u/35196281?v=4?s=100" width="100px;" alt="Vivek"/><br /><sub><b>Vivek</b></sub></a><br /><a href="https://github.com/jmakhack/myanimelist-cli/commits?author=viv1kk" title="Code">💻</a> <a href="https://github.com/jmakhack/myanimelist-cli/commits?author=viv1kk" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
