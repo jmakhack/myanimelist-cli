@@ -156,6 +156,16 @@
         "code",
         "maintenance"
       ]
+    },
+    {
+      "login": "viv1kk",
+      "name": "Vivek",
+      "avatar_url": "https://avatars.githubusercontent.com/u/35196281?v=4",
+      "profile": "https://github.com/viv1kk",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
